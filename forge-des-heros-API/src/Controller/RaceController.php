@@ -17,9 +17,19 @@ final class RaceController extends AbstractController
     #[Route(name: 'app_race_index', methods: ['GET'])]
     public function index(RaceRepository $raceRepository): Response
     {
-        return $this->render('race/index.html.twig', [
-            'races' => $raceRepository->findAll(),
+        if (in_array("ROLE_ADMIN", $this->getUser()->getRoles())) //& Vérifier si l'utilisateur 
+        {
+            return $this->render('race/index.html.twig', ['races' => $raceRepository->findAll(),
         ]);
+        }
+        else
+        {
+            return $this->render('AdminError/adminErr.html.twig', [
+                'message' => "Vous n'avez pas les droits pour accéder à cette page."
+            ]);
+        }
+        
+        
     }
 
     #[Route('/new', name: 'app_race_new', methods: ['GET', 'POST'])]
