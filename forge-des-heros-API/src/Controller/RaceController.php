@@ -10,26 +10,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/race')]
+#[IsGranted('ROLE_ADMIN')]
 final class RaceController extends AbstractController
 {
     #[Route(name: 'app_race_index', methods: ['GET'])]
     public function index(RaceRepository $raceRepository): Response
     {
-        if (in_array("ROLE_ADMIN", $this->getUser()->getRoles())) //& Vérifier si l'utilisateur 
-        {
-            return $this->render('race/index.html.twig', ['races' => $raceRepository->findAll(),
-        ]);
-        }
-        else
-        {
-            return $this->render('AdminError/adminErr.html.twig', [
-                'message' => "Vous n'avez pas les droits pour accéder à cette page."
-            ]);
-        }
-        
-        
+        return $this->render('race/index.html.twig', ['races' => $raceRepository->findAll(),]);
     }
 
     #[Route('/new', name: 'app_race_new', methods: ['GET', 'POST'])]
