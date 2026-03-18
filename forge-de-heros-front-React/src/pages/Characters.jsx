@@ -1,9 +1,12 @@
 import CharacterCard from "../components/CharacterCard"
+import Header from "../components/Header";
+
 
 function Characters()
 {
     return (
         <>
+            <Header/>
             <h1>Affichage des personnages</h1>
 
             <div>
