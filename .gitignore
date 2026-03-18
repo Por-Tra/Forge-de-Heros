@@ -1,0 +1,33 @@
+
+TODO.md
+
+# Symfony fichiers automatiques + local .env
+forge-des-heros-API/var/
+forge-des-heros-API/vendor/
+forge-des-heros-API/public/bundles/
+forge-des-heros-API/public/uploads/
+forge-des-heros-API/.env.local
+forge-des-heros-API/.env.local.php
+forge-des-heros-API/.env.*.local
+forge-des-heros-API/config/secrets/prod/prod.decrypt.private.php
+forge-des-heros-API/config/
+forge-des-heros-API/.env
+forge-des-heros-API/.env.*.local.php
+forge-des-heros-API/.env.dev
+forge-des-heros-API/.editorconfig
+
+
+
+
+# React generated/local files
+forge-de-heros-front-React/node_modules/
+forge-de-heros-front-React/dist/
+forge-de-heros-front-React/dist-ssr/
+forge-de-heros-front-React/.env.local
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+*.DS_Store
