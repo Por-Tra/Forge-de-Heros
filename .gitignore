@@ -1,5 +1,6 @@
 
 TODO.md
+NavigationSymfony.md
 
 # Symfony fichiers automatiques + local .env
 forge-des-heros-API/var/
@@ -11,7 +12,7 @@ forge-des-heros-API/.env.local.php
 forge-des-heros-API/.env.*.local
 forge-des-heros-API/config/secrets/prod/prod.decrypt.private.php
 forge-des-heros-API/config/
-forge-des-heros-API/.env
+# forge-des-heros-API/.env
 forge-des-heros-API/.env.*.local.php
 forge-des-heros-API/.env.dev
 forge-des-heros-API/.editorconfig
