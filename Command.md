@@ -23,6 +23,8 @@ symfony console make:entity Skill
 symfony console make:entity Character
 # Champs: name, level, strength, dexterity, constitution, intelligence, wisdom, charisma, healthPoints, image (string)
 
+composer require symfony/security-bundle
+
 symfony console make:entity Party
 # Champs: name (string), description (text), maxSize (integer)
 
