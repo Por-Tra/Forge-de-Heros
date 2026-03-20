@@ -69,6 +69,11 @@ class Character
     {
         $this->level = $level;
 
+        if ($level < 0) { // Securing back data
+            $level = 0;
+            $this->level =  $level;
+        }
+
         return $this;
     }
 
@@ -80,6 +85,11 @@ class Character
     public function setStrength(int $strength): static
     {
         $this->strength = $strength;
+
+        if ($strength < 0) { // Securing back data
+            $strength = 0;
+            $this->strength =  $strength;
+        }
 
         return $this;
     }
@@ -93,6 +103,11 @@ class Character
     {
         $this->dexterity = $dexterity;
 
+        if ($dexterity < 0) { // Securing back data
+            $dexterity = 0;
+            $this->dexterity =  $dexterity;
+        }
+
         return $this;
     }
 
@@ -104,6 +119,11 @@ class Character
     public function setConstitution(int $constitution): static
     {
         $this->constitution = $constitution;
+
+        if ($constitution < 0) { // Securing back data
+            $constitution = 0;
+            $this->constitution = $constitution;
+        }
 
         return $this;
     }
@@ -117,6 +137,12 @@ class Character
     {
         $this->intelligence = $intelligence;
 
+         if ($intelligence < 0) // Securing back data
+         {
+             $intelligence = 0;
+             $this->intelligence = $intelligence;
+         }
+
         return $this;
     }
 
@@ -128,6 +154,11 @@ class Character
     public function setWisdom(int $wisdom): static
     {
         $this->wisdom = $wisdom;
+
+        if ($wisdom < 0) { // Securing back data
+            $wisdom = 0;
+            $this->wisdom = $wisdom;
+        }
 
         return $this;
     }
@@ -141,6 +172,11 @@ class Character
     {
         $this->charisma = $charisma;
 
+        if ($charisma < 0) { // Securing back data
+            $charisma = 0;
+            $this->charisma = $charisma;
+        }
+
         return $this;
     }
 
@@ -152,6 +188,11 @@ class Character
     public function setHealthPoints(int $healthPoints): static
     {
         $this->healthPoints = $healthPoints;
+
+        if ($healthPoints < 0) { // Securing back data
+            $healthPoints = 0;
+            $this->healthPoints = $healthPoints;
+        }
 
         return $this;
     }
