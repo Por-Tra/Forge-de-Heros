@@ -47,7 +47,9 @@ final class CharacterController extends AbstractController
             if ($avatarFile) {
                 $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
+                // Use the client extension to avoid MIME guessing dependency (fileinfo).
                 $extension = strtolower($avatarFile->getClientOriginalExtension());
+                // Keep a strict whitelist for allowed avatar formats.
                 if (!in_array($extension, ['png', 'jpg', 'jpeg', 'webp'], true)) {
                     $this->addFlash('error', 'Format d\'avatar non supporte.');
 
@@ -57,6 +59,7 @@ final class CharacterController extends AbstractController
                     ]);
                 }
 
+                // Build a unique filename to prevent collisions.
                 $newFilename = $safeFilename.'-'.uniqid('', true).'.'.$extension;
 
                 try {
@@ -107,7 +110,9 @@ final class CharacterController extends AbstractController
                 $oldAvatar = $character->getImage();
                 $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
+                // Use the client extension to avoid MIME guessing dependency (fileinfo).
                 $extension = strtolower($avatarFile->getClientOriginalExtension());
+                // Keep a strict whitelist for allowed avatar formats.
                 if (!in_array($extension, ['png', 'jpg', 'jpeg', 'webp'], true)) {
                     $this->addFlash('error', 'Format d\'avatar non supporte.');
 
@@ -117,6 +122,7 @@ final class CharacterController extends AbstractController
                     ]);
                 }
 
+                // Build a unique filename to prevent collisions.
                 $newFilename = $safeFilename.'-'.uniqid('', true).'.'.$extension;
 
                 try {
