@@ -31,13 +31,12 @@
 
                 {% if is_granted('ROLE_USER') %}
                     <section>
-                        <h3>Section Character</h3>
+                        <h3>Section User</h3>
                         <details open>
                             <summary>Sous-section Character</summary>
                             <ul>
                                 <li><a href="{{ path('app_character_index') }}">/character</a></li>
                                 <li><a href="{{ path('app_character_new') }}">/character/new</a></li>
-                                <li>/{id}, /{id}/edit, suppression : via la liste des characters</li>
                             </ul>
                         </details>
 
@@ -46,7 +45,6 @@
                             <ul>
                                 <li><a href="{{ path('app_party_index') }}">/party</a></li>
                                 <li><a href="{{ path('app_party_new') }}">/party/new</a></li>
-                                <li>/{id}, /{id}/edit, suppression : via la liste des parties</li>
                             </ul>
                         </details>
                     </section>
@@ -61,7 +59,6 @@
                             <ul>
                                 <li><a href="{{ path('app_character_class_index') }}">/character/class</a></li>
                                 <li><a href="{{ path('app_character_class_new') }}">/character/class/new</a></li>
-                                <li>/{id}, /{id}/edit, suppression : via la liste des classes</li>
                             </ul>
                         </details>
 
@@ -70,7 +67,6 @@
                             <ul>
                                 <li><a href="{{ path('app_race_index') }}">/race</a></li>
                                 <li><a href="{{ path('app_race_new') }}">/race/new</a></li>
-                                <li>/{id}, /{id}/edit, suppression : via la liste des races</li>
                             </ul>
                         </details>
 
@@ -79,7 +75,6 @@
                             <ul>
                                 <li><a href="{{ path('app_skill_index') }}">/skill</a></li>
                                 <li><a href="{{ path('app_skill_new') }}">/skill/new</a></li>
-                                <li>/{id}, /{id}/edit, suppression : via la liste des skills</li>
                             </ul>
                         </details>
                     </section>
