@@ -22,6 +22,7 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+        // vérifier si le formulaire a été soumis et est valide
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
@@ -32,11 +33,19 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            //& Vérifier si l'utilisateur est le premier à s'inscrire et lui attribuer le rôle d'administrateur
+            $userCount = $entityManager->getRepository(User::class)->count([]);
+            if ($userCount === 1) {
+                $user->setRoles(['ROLE_ADMIN']);
+                $entityManager->flush();
+            }
+
             // do anything else you need here, like send an email
 
             return $security->login($user, 'form_login', 'main');
         }
 
+        
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
