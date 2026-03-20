@@ -49,14 +49,23 @@
             </tr>
             <tr>
                 <th>Image</th>
-                <td>{{ character.image }}</td>
+                <td>
+                    {% if character.image %}
+                        <img src="{{ asset('uploads/avatars/' ~ character.image) }}" alt="Avatar de {{ character.name }}" width="160" height="160" style="object-fit: cover; border-radius: 10px;" />
+                    {% else %}
+                        <span>Aucun avatar</span>
+                    {% endif %}
+                </td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_character_index') }}">back to list</a>
 
+    {# Buttons #}
     <a href="{{ path('app_character_edit', {'id': character.id}) }}">edit</a>
 
     {{ include('character/_delete_form.html.twig') }}
+
+    <a href="{{ path('app_character_index') }}">back to list</a>
+
 {% endblock %}
