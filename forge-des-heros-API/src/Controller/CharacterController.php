@@ -7,10 +7,14 @@ use App\Form\CharacterType;
 use App\Repository\CharacterRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/character')]
 #[IsGranted('ROLE_USER')]
@@ -25,13 +29,44 @@ final class CharacterController extends AbstractController
     }
 
     #[Route('/new', name: 'app_character_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        SluggerInterface $slugger,
+        #[Autowire('%avatars_directory%')] string $avatarsDirectory,
+    ): Response
     {
         $character = new Character();
         $form = $this->createForm(CharacterType::class, $character);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile|null $avatarFile */
+            $avatarFile = $form->get('image')->getData();
+
+            if ($avatarFile) {
+                $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $extension = strtolower($avatarFile->getClientOriginalExtension());
+                if (!in_array($extension, ['png', 'jpg', 'jpeg', 'webp'], true)) {
+                    $this->addFlash('error', 'Format d\'avatar non supporte.');
+
+                    return $this->render('character/new.html.twig', [
+                        'character' => $character,
+                        'form' => $form,
+                    ]);
+                }
+
+                $newFilename = $safeFilename.'-'.uniqid('', true).'.'.$extension;
+
+                try {
+                    $avatarFile->move($avatarsDirectory, $newFilename);
+                    $character->setImage($newFilename);
+                } catch (FileException) {
+                    $this->addFlash('error', 'Impossible de televerser l\'avatar.');
+                }
+            }
+
             $entityManager->persist($character);
             $entityManager->flush();
 
@@ -53,12 +88,52 @@ final class CharacterController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_character_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Character $character, EntityManagerInterface $entityManager): Response
+    public function edit(
+        Request $request,
+        Character $character,
+        EntityManagerInterface $entityManager,
+        SluggerInterface $slugger,
+        #[Autowire('%avatars_directory%')] string $avatarsDirectory,
+    ): Response
     {
         $form = $this->createForm(CharacterType::class, $character);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile|null $avatarFile */
+            $avatarFile = $form->get('image')->getData();
+
+            if ($avatarFile) {
+                $oldAvatar = $character->getImage();
+                $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $extension = strtolower($avatarFile->getClientOriginalExtension());
+                if (!in_array($extension, ['png', 'jpg', 'jpeg', 'webp'], true)) {
+                    $this->addFlash('error', 'Format d\'avatar non supporte.');
+
+                    return $this->render('character/edit.html.twig', [
+                        'character' => $character,
+                        'form' => $form,
+                    ]);
+                }
+
+                $newFilename = $safeFilename.'-'.uniqid('', true).'.'.$extension;
+
+                try {
+                    $avatarFile->move($avatarsDirectory, $newFilename);
+                    $character->setImage($newFilename);
+
+                    if ($oldAvatar) {
+                        $oldAvatarPath = $avatarsDirectory.DIRECTORY_SEPARATOR.$oldAvatar;
+                        if (is_file($oldAvatarPath)) {
+                            @unlink($oldAvatarPath);
+                        }
+                    }
+                } catch (FileException) {
+                    $this->addFlash('error', 'Impossible de televerser le nouvel avatar.');
+                }
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_character_index', [], Response::HTTP_SEE_OTHER);
@@ -71,9 +146,22 @@ final class CharacterController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_character_delete', methods: ['POST'])]
-    public function delete(Request $request, Character $character, EntityManagerInterface $entityManager): Response
+    public function delete(
+        Request $request,
+        Character $character,
+        EntityManagerInterface $entityManager,
+        #[Autowire('%avatars_directory%')] string $avatarsDirectory,
+    ): Response
     {
         if ($this->isCsrfTokenValid('delete'.$character->getId(), $request->getPayload()->getString('_token'))) {
+            $avatar = $character->getImage();
+            if ($avatar) {
+                $avatarPath = $avatarsDirectory.DIRECTORY_SEPARATOR.$avatar;
+                if (is_file($avatarPath)) {
+                    @unlink($avatarPath);
+                }
+            }
+
             $entityManager->remove($character);
             $entityManager->flush();
         }
