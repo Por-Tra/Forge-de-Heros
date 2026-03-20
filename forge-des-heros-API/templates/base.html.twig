@@ -12,6 +12,83 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <header>
+            <nav aria-label="Navigation principale">
+                <h2>Navigation</h2>
+
+                <section>
+                    <h3>Section Accès</h3>
+                    <ul>
+                        {% if app.user %}
+                            <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                            <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+                        {% else %}
+                            <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                            <li><a href="{{ path('app_register') }}">Inscription</a></li>
+                        {% endif %}
+                    </ul>
+                </section>
+
+                {% if is_granted('ROLE_USER') %}
+                    <section>
+                        <h3>Section Character</h3>
+                        <details open>
+                            <summary>Sous-section Character</summary>
+                            <ul>
+                                <li><a href="{{ path('app_character_index') }}">/character</a></li>
+                                <li><a href="{{ path('app_character_new') }}">/character/new</a></li>
+                                <li>/{id}, /{id}/edit, suppression : via la liste des characters</li>
+                            </ul>
+                        </details>
+
+                        <details>
+                            <summary>Sous-section Party</summary>
+                            <ul>
+                                <li><a href="{{ path('app_party_index') }}">/party</a></li>
+                                <li><a href="{{ path('app_party_new') }}">/party/new</a></li>
+                                <li>/{id}, /{id}/edit, suppression : via la liste des parties</li>
+                            </ul>
+                        </details>
+                    </section>
+                {% endif %}
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <section>
+                        <h3>Section Admin</h3>
+
+                        <details>
+                            <summary>Sous-section Character Class</summary>
+                            <ul>
+                                <li><a href="{{ path('app_character_class_index') }}">/character/class</a></li>
+                                <li><a href="{{ path('app_character_class_new') }}">/character/class/new</a></li>
+                                <li>/{id}, /{id}/edit, suppression : via la liste des classes</li>
+                            </ul>
+                        </details>
+
+                        <details>
+                            <summary>Sous-section Race</summary>
+                            <ul>
+                                <li><a href="{{ path('app_race_index') }}">/race</a></li>
+                                <li><a href="{{ path('app_race_new') }}">/race/new</a></li>
+                                <li>/{id}, /{id}/edit, suppression : via la liste des races</li>
+                            </ul>
+                        </details>
+
+                        <details>
+                            <summary>Sous-section Skill</summary>
+                            <ul>
+                                <li><a href="{{ path('app_skill_index') }}">/skill</a></li>
+                                <li><a href="{{ path('app_skill_new') }}">/skill/new</a></li>
+                                <li>/{id}, /{id}/edit, suppression : via la liste des skills</li>
+                            </ul>
+                        </details>
+                    </section>
+                {% endif %}
+            </nav>
+        </header>
+
+        <main>
+            {% block body %}{% endblock %}
+        </main>
     </body>
 </html>
