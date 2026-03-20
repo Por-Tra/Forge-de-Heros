@@ -6,6 +6,7 @@ function CharacterDetail({ characterID })
 
     /* TODO
         - Afficher toutes les informations du personnages:
+            - Nom
             - Avatar
             - Stats
             - Classe
