@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/React-18-blue?logo=react">
   <img src="https://img.shields.io/badge/SQLite-Database-lightgrey?logo=sqlite">
   <img src="https://img.shields.io/badge/API-REST-green">
-  <img src="https://img.shields.io/github/license/Por-Tra/Forge-des-Heros">
+  <img src="https://img.shields.io/github/license/Por-Tra/Forge-de-Heros">
 </p>
 
 <p align="center">
@@ -21,8 +21,8 @@ Forge des Héros est une application web permettant de créer, gérer et explore
 
 Le projet est structuré en deux applications distinctes :
 
-* Une application Symfony (backend + API REST)
-* Une application React (interface utilisateur)
+- Une application Symfony (backend + API REST)
+- Une application React (interface utilisateur)
 
 L'application permet de gérer des personnages, leurs caractéristiques, leurs classes ainsi que leur intégration dans des groupes d’aventure.
 
@@ -32,49 +32,49 @@ L'application permet de gérer des personnages, leurs caractéristiques, leurs c
 
 ### Gestion des utilisateurs
 
-* Inscription et authentification
-* Gestion des rôles (administrateur / utilisateur)
-* Accès restreint aux fonctionnalités selon les permissions
+- Inscription et authentification
+- Gestion des rôles (administrateur / utilisateur)
+- Accès restreint aux fonctionnalités selon les permissions
 
 ### Gestion des personnages
 
-* Création, modification et suppression de personnages
-* Attribution d'une race et d'une classe
-* Système de caractéristiques (STR, DEX, CON, INT, WIS, CHA)
-* Upload d’image (avatar)
-* Calcul automatique des points de vie
-* Système de répartition de points (Point Buy)
+- Création, modification et suppression de personnages
+- Attribution d'une race et d'une classe
+- Système de caractéristiques (STR, DEX, CON, INT, WIS, CHA)
+- Upload d’image (avatar)
+- Calcul automatique des points de vie
+- Système de répartition de points (Point Buy)
 
 ### Classes et compétences
 
-* Association de compétences aux classes
-* Gestion des relations entre classes et compétences
+- Association de compétences aux classes
+- Gestion des relations entre classes et compétences
 
 ### Groupes d’aventure
 
-* Création de groupes (Party)
-* Gestion du nombre maximum de membres
-* Ajout et retrait de personnages
+- Création de groupes (Party)
+- Gestion du nombre maximum de membres
+- Ajout et retrait de personnages
 
 ### Recherche et filtrage
 
-* Recherche de personnages par nom
-* Filtrage par race et classe
-* Filtrage des groupes (complets ou disponibles)
+- Recherche de personnages par nom
+- Filtrage par race et classe
+- Filtrage des groupes (complets ou disponibles)
 
 ### API REST
 
-* Exposition des données via une API publique
-* Endpoints pour races, classes, compétences, personnages et groupes
-* Réponses JSON structurées
+- Exposition des données via une API publique
+- Endpoints pour races, classes, compétences, personnages et groupes
+- Réponses JSON structurées
 
 ### Interface React
 
-* Affichage des personnages sous forme de cartes
-* Navigation entre les pages
-* Filtres dynamiques
-* Pages de détail pour personnages et groupes
-* Visualisation des statistiques
+- Affichage des personnages sous forme de cartes
+- Navigation entre les pages
+- Filtres dynamiques
+- Pages de détail pour personnages et groupes
+- Visualisation des statistiques
 
 ---
 
@@ -82,16 +82,16 @@ L'application permet de gérer des personnages, leurs caractéristiques, leurs c
 
 ### Backend
 
-* Symfony
-* Doctrine ORM
-* SQLite
-* API REST
-* NelmioCorsBundle
+- Symfony
+- Doctrine ORM
+- SQLite
+- API REST
+- NelmioCorsBundle
 
 ### Frontend
 
-* React (Vite)
-* Fetch API
+- React (Vite)
+- Fetch API
 
 ---
 
@@ -100,13 +100,12 @@ L'application permet de gérer des personnages, leurs caractéristiques, leurs c
 ### Backend Symfony
 
 ```bash
-git clone https://github.com/Por-Tra/Forge-des-Heros.git
+git clone https://github.com/Por-Tra/Forge-de-Heros.git
 cd Forge-des-Heros
 
 composer install
-cp .env.example .env
+cp .env.local .env
 
-symfony console doctrine:database:create
 symfony console doctrine:migrations:migrate
 php bin/console doctrine:fixtures:load
 ```
@@ -140,13 +139,13 @@ http://localhost:8000/api/v1
 
 ### Routes principales
 
-| Route       | Description           |
-| ----------- | --------------------- |
-| /races      | Liste des races       |
-| /classes    | Liste des classes     |
-| /skills     | Liste des compétences |
-| /characters | Liste des personnages |
-| /parties    | Liste des groupes     |
+| Route            | Description           |
+| ---------------- | --------------------- |
+| /race            | Liste des races       |
+| /character/class | Liste des classes     |
+| /skills          | Liste des compétences |
+| /character       | Liste des personnages |
+| /party           | Liste des groupes     |
 
 ### Exemple
 
@@ -162,18 +161,18 @@ GET /api/v1/characters?name=arthur&class=guerrier
 
 Chaque personnage possède six caractéristiques :
 
-* Strength
-* Dexterity
-* Constitution
-* Intelligence
-* Wisdom
-* Charisma
+- Strength
+- Dexterity
+- Constitution
+- Intelligence
+- Wisdom
+- Charisma
 
 Contraintes :
 
-* Valeur minimale : 8
-* Valeur maximale : 15
-* Budget total : 27 points
+- Valeur minimale : 8
+- Valeur maximale : 15
+- Budget total : 27 points
 
 ---
 
@@ -214,22 +213,11 @@ HP = dice_max + floor((constitution - 10) / 2)
   <a href="https://github.com/Mortann">Mortann</a>
 </p>
 
----
-
-## Bonnes pratiques
-
-* Code écrit en anglais
-* Migrations versionnées
-* Base de données non versionnée
-* Architecture claire avec séparation frontend / backend
-
----
-
 ## Notes
 
-* Utilisation de SQLite
-* Chargement des fixtures requis avant utilisation
-* Configuration CORS nécessaire pour la communication entre le frontend et l’API
+- Utilisation de SQLite
+- Chargement des fixtures requis avant utilisation
+- Configuration CORS nécessaire pour la communication entre le frontend et l’API
 
 ---
 
