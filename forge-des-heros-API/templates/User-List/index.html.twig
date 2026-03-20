@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des utilisateurs{% endblock %}
+{% block title %}Users gestion{% endblock %}
 
 {% block body %}
-    <h1>Gestion des utilisateurs</h1>
+    <h1>Users gestion</h1>
 
     {% if users is empty %}
-        <p>Aucun utilisateur trouvé.</p>
+        <p>No Users Found</p>
     {% else %}
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Username</th>
-                    <th>Email</th>
-                    <th>Rôles</th>
+                    <th>Mail</th>
+                    <th>Role</th>
                 </tr>
             </thead>
             <tbody>

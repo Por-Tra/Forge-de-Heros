@@ -24,6 +24,4 @@ final class UserListController extends AbstractController
         ]);
     }
 
-
-
 }
