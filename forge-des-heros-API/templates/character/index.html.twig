@@ -37,8 +37,10 @@
                 <td>{{ character.healthPoints }}</td>
                 <td>{{ character.image }}</td>
                 <td>
-                    <a href="{{ path('app_character_show', {'id': character.id}) }}">show</a>
-                    <a href="{{ path('app_character_edit', {'id': character.id}) }}">edit</a>
+                    <a href="{{ path('app_character_show', {'id': character.id}) }}">Show</a>
+                    <a href="{{ path('app_character_edit', {'id': character.id}) }}">Edit</a>
+                    {{ include('character/_delete_form.html.twig') }}
+
                 </td>
             </tr>
         {% else %}
