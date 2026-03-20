@@ -40,7 +40,7 @@ class Character
     #[ORM\Column]
     private ?int $healthPoints = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type : 'string', nullable: true)]
     private ?string $image = null;
 
     public function getId(): ?int
@@ -208,4 +208,5 @@ class Character
 
         return $this;
     }
+
 }

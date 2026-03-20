@@ -78,4 +78,5 @@ final class CharacterController extends AbstractController
 
         return $this->redirectToRoute('app_character_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }
