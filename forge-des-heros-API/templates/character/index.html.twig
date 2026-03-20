@@ -35,10 +35,18 @@
                 <td>{{ character.wisdom }}</td>
                 <td>{{ character.charisma }}</td>
                 <td>{{ character.healthPoints }}</td>
-                <td>{{ character.image }}</td>
                 <td>
-                    <a href="{{ path('app_character_show', {'id': character.id}) }}">show</a>
-                    <a href="{{ path('app_character_edit', {'id': character.id}) }}">edit</a>
+                    {% if character.image %}
+                        <img src="{{ asset('uploads/avatars/' ~ character.image) }}" alt="Avatar de {{ character.name }}" width="64" height="64" style="object-fit: cover; border-radius: 8px;" />
+                    {% else %}
+                        <span>Aucun avatar</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_character_show', {'id': character.id}) }}">Show</a>
+                    <a href="{{ path('app_character_edit', {'id': character.id}) }}">Edit</a>
+                    {{ include('character/_delete_form.html.twig') }}
+
                 </td>
             </tr>
         {% else %}

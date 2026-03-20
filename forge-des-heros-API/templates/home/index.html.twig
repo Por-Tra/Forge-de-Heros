@@ -1,19 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block body %}
-    <main>
-        <h1>La Forge de Heros</h1>
 
-        <p>Connectez-vous pour continuer</p>
-
-        <form action="{{ path('app_login') }}" method="get">
-            <button type="submit">Se connecter</button>
-        </form>
-
-        <form action="{{ path('app_register') }}" method="get">
-            <button type="submit">S'inscrire</button>
-        </form>
-    </main>
 {% endblock %}
