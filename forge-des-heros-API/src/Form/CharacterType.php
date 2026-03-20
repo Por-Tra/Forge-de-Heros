@@ -32,8 +32,6 @@ class CharacterType extends AbstractType
                 'constraints' => [
                     new Assert\File(
                         maxSize: '1024k',
-                        extensions: ['png', 'jpg', 'jpeg', 'webp'],
-                        extensionsMessage: 'Please upload a valid png, jpg, jpeg or webp document',
                     )
                 ],
             ])
