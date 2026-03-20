@@ -21,10 +21,18 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 final class CharacterController extends AbstractController
 {
     #[Route(name: 'app_character_index', methods: ['GET'])]
-    public function index(CharacterRepository $characterRepository): Response
+    public function index(Request $request ,CharacterRepository $characterRepository): Response
     {
+        $search = $request->query->get('search');
+
+        if ($search) {
+            $characters = $characterRepository->searchByName($search);
+        } else {
+            $characters = $characterRepository->findAll();
+        }
+
         return $this->render('character/index.html.twig', [
-            'characters' => $characterRepository->findAll(),
+            'characters' => $characters,
         ]);
     }
 
@@ -174,5 +182,24 @@ final class CharacterController extends AbstractController
 
         return $this->redirectToRoute('app_character_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+    // Nouvelle fonction pour la recherche de personnages par nom
+    public function search(Request $request, CharacterRepository $characterRepository): Response
+    {
+        $query = $request->query->get('search', '');
+        $characters = [];
+
+        if ($query) {
+            $characters = $characterRepository->searchByName($query);
+        }
+
+        return $this->render('character/search.html.twig', [
+            'characters' => $characters,
+            'query' => $query,
+        ]);
+    }
+
+    
 
 }
