@@ -20,7 +20,7 @@ class Party
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type:'integer', nullable: true, options: ['unsigned' => true])] // Making maxSize unsigned int
     private ?int $maxSize = null;
 
     public function getId(): ?int
@@ -60,6 +60,12 @@ class Party
     public function setMaxSize(int $maxSize): static
     {
         $this->maxSize = $maxSize;
+
+        if ($maxSize < 0) // Securing back for maxSize >= 0
+        {
+            $maxSize = 0;
+            $this->maxSize = $maxSize;
+        }
 
         return $this;
     }
