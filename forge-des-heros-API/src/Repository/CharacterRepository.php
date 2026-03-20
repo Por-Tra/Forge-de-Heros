@@ -40,4 +40,25 @@ class CharacterRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
+    public function searchByName(string $name): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.name LIKE :name')
+            ->setParameter('name', '%' . $name . '%')
+            ->orderBy('c.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    // public function searchByName(string $value): array
+    // {
+    //     return $this->createQueryBuilder('c')
+    //         ->andWhere('c.name LIKE :val')
+    //         ->setParameter('val', '%' . $value . '%')
+    //         ->getQuery()
+    //         ->getResult();
+    // }
+
 }
