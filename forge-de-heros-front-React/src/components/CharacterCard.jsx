@@ -1,9 +1,8 @@
 //import { getCharacter } from "../utils/api";
 import { Link } from "react-router-dom"; // ajouté
-import jesusAvatar from "../assets/avatars/jesus.jpg"
 import "../styles/Character.Card.scss";
 
-function CharacterCard({ characterID })
+function CharacterCard({ characterID, data })
 {
     // const data = getCharacter(characterID);
 
@@ -16,15 +15,8 @@ function CharacterCard({ characterID })
         - Niveau 
      */
 
-    const data = {
-        id: 1,
-        avatar: jesusAvatar,
-        name: "Jesus",
-        class: "Dieu",
-        race: "Humain",
-        level: 67
-    }
-   
+    
+    //! On utilise data en props pour les tests seulement
 
     return (
         <div className="character-card">
