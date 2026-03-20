@@ -50,6 +50,8 @@
                     </section>
                 {% endif %}
 
+                {# ------------------------------------------------------------------------------------------------------------------------------------- #}
+
                 {% if is_granted('ROLE_ADMIN') %}
                     <section>
                         <h3>Admin Section</h3>
@@ -77,6 +79,14 @@
                                 <li><a href="{{ path('app_skill_new') }}">Create a new skill</a></li>
                             </ul>
                         </details>
+
+                        <details>
+                             <summary>Sous-section User</summary>
+                                <ul>
+                                    <li><a href="{{ path('user_list') }}">/user</a></li>
+                                </ul>
+                        </details>
+
                     </section>
                 {% endif %}
             </nav>
