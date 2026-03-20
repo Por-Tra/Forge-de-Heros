@@ -1,0 +1,5 @@
+
+    <form method="get" action="{{ path('app_character_index') }}">
+        <input type="text" name="search" placeholder="Search by name..." value="{{ app.request.query.get('search') }}">
+        <button type="submit">Search</button>
+    </form>

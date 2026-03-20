@@ -1,9 +1,17 @@
+{# index.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Character index{% endblock %}
 
+{% block title %}Character index{% endblock %}
 {% block body %}
+    {# Barre de recherche pour chercher un personnage par son nom #}
+    {% include 'character/search.html.twig' %}
+    
     <h1>Character index</h1>
+
+    
+    
 
     <table class="table">
         <thead>
