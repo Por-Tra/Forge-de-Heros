@@ -10,6 +10,23 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CharacterApiController extends AbstractController
 {
+    private static function normalizeParties(iterable $parties): array
+    {
+        $normalized = [];
+
+        foreach ($parties as $party) {
+            $normalized[] = [
+                'id' => $party->getId(),
+                'name' => $party->getName(),
+                'description' => $party->getDescription(),
+                'maxSize' => $party->getMaxSize(),
+                'currentSize' => $party->getCharacters()->count(),
+            ];
+        }
+
+        return $normalized;
+    }
+
     #[Route('/api/v1/characters', methods: ['GET'])]
     public function index(Request $request, CharacterRepository $repo): JsonResponse
     {
@@ -35,6 +52,7 @@ final class CharacterApiController extends AbstractController
                 'id' => $character->getRace()->getId(),
                 'name' => $character->getRace()->getName(),
             ] : null,
+            'parties' => self::normalizeParties($character->getParties()),
         ], $characters);
 
         return $this->json([
@@ -56,13 +74,6 @@ final class CharacterApiController extends AbstractController
         if (!$character) {
             return $this->json(['error' => 'Character not found'], 404);
         }
-
-        $parties = array_map(static fn ($party) => [
-            'id' => $party->getId(),
-            'name' => $party->getName(),
-            'maxSize' => $party->getMaxSize(),
-            'currentSize' => $party->getCharacters()->count(),
-        ], $character->getParties()->toArray());
 
         return $this->json([
             'data' => [
@@ -87,7 +98,7 @@ final class CharacterApiController extends AbstractController
                     'id' => $character->getRace()->getId(),
                     'name' => $character->getRace()->getName(),
                 ] : null,
-                'parties' => $parties,
+                'parties' => self::normalizeParties($character->getParties()),
             ],
         ]);
     }

@@ -60,7 +60,8 @@ class CharacterRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('c')
             ->leftJoin('c.characterClass', 'cc')
             ->leftJoin('c.race', 'r')
-            ->addSelect('cc', 'r')
+            ->leftJoin('c.parties', 'p')
+            ->addSelect('cc', 'r', 'p')
             ->orderBy('c.name', 'ASC');
 
         if (null !== $name && '' !== trim($name)) {
