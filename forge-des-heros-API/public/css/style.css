@@ -117,3 +117,13 @@
         display: flex;
     }
 }
+
+/* Background */
+
+body {
+    background-image: url("../asset/bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
