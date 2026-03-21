@@ -15,27 +15,29 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Repository\CharacterClassRepository;
+use App\Repository\RaceRepository;
 
 #[Route('/character')]
 #[IsGranted('ROLE_USER')]
 final class CharacterController extends AbstractController
 {
     #[Route(name: 'app_character_index', methods: ['GET'])]
-    public function index(Request $request ,CharacterRepository $characterRepository): Response
+    public function index(Request $request, CharacterRepository $characterRepository, CharacterClassRepository $characterClassRepository, RaceRepository $raceRepository): Response 
     {
-        $search = $request->query->get('search');
+        // Récupération des paramètres de recherche et de filtrage
+        $search  = $request->query->get('search');
+        $classId = $request->query->get('class');
+        $raceId  = $request->query->get('race');
 
-        if ($search) {
-            $characters = $characterRepository->searchByName($search);
-        } else {
-            $characters = $characterRepository->findAll();
-        }
+        // Filter les perso en fonction des paramètre -> voir CharacterRepository.findWithFilters()
+        $characters = $characterRepository->findWithFilters($search, $classId, $raceId);
 
         return $this->render('character/index.html.twig', [
-            'characters' => $characters,
-        ]);
+            'characters' => $characters, 'classes'=> $characterClassRepository->findAll(), 'races'=> $raceRepository->findAll()]);
     }
 
+    // Ajouter un nouveaux personnage
     #[Route('/new', name: 'app_character_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
@@ -49,16 +51,25 @@ final class CharacterController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // The created character must belong to the currently authenticated user.
+            $character->setUser($this->getUser());
+
+            // TODO : Calculer les PV automatiquement ICI
+            //! PV = maximum du dé de vie + modificateur de Constitution
+
             /** @var UploadedFile|null $avatarFile */
             $avatarFile = $form->get('image')->getData();
 
+            // Mettre un avatar
             if ($avatarFile) {
                 $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
-                // Use the client extension to avoid MIME guessing dependency (fileinfo).
+
+                //& Utiliser l'extension du client pour éviter la dépendance à fileinfo (MIME guessing).
                 $extension = strtolower($avatarFile->getClientOriginalExtension());
-                // Keep a strict whitelist for allowed avatar formats.
-                if (!in_array($extension, ['png', 'jpg', 'jpeg', 'webp'], true)) {
+                // 
+                if (!in_array($extension, ['png', 'jpg', 'jpeg', 'webp'], true)) //& Vérif l'extension
+                {
                     $this->addFlash('error', 'Format d\'avatar non supporte.');
 
                     return $this->render('character/new.html.twig', [
@@ -70,10 +81,12 @@ final class CharacterController extends AbstractController
                 // Build a unique filename to prevent collisions.
                 $newFilename = $safeFilename.'-'.uniqid('', true).'.'.$extension;
 
-                try {
+                try 
+                {
                     $avatarFile->move($avatarsDirectory, $newFilename);
                     $character->setImage($newFilename);
-                } catch (FileException) {
+                } catch (FileException) 
+                {
                     $this->addFlash('error', 'Impossible de televerser l\'avatar.');
                 }
             }
@@ -84,10 +97,7 @@ final class CharacterController extends AbstractController
             return $this->redirectToRoute('app_character_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('character/new.html.twig', [
-            'character' => $character,
-            'form' => $form,
-        ]);
+        return $this->render('character/new.html.twig', ['character' => $character, 'form' => $form,]);
     }
 
     #[Route('/{id}', name: 'app_character_show', methods: ['GET'])]
@@ -184,7 +194,7 @@ final class CharacterController extends AbstractController
     }
 
 
-    // Nouvelle fonction pour la recherche de personnages par nom
+    //fonction pour la recherche de personnages par nom
     public function search(Request $request, CharacterRepository $characterRepository): Response
     {
         $query = $request->query->get('search', '');
@@ -200,6 +210,5 @@ final class CharacterController extends AbstractController
         ]);
     }
 
-    
 
 }

@@ -6,10 +6,14 @@ use App\Entity\Character;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType; //Integer requirement for an attribute to be >= 0
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
-use Symfony\Component\Form\Extension\Core\Type\FileType; // To be able to upload images through the form
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints as Assert;
+
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\CharacterClass;
+use App\Entity\Race;
 
 
 class CharacterType extends AbstractType
@@ -17,50 +21,54 @@ class CharacterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('image', FileType::class, [ // Symfony doc code to upload images through the form
-                'label' => 'Avatar',
-
-                // unmapped means that this field is not associated to any entity property
-                'mapped' => false,
-
-                // make it optional so you don't have to re-upload the PDF file
-                // every time you edit the Product details
+            ->add('image', FileType::class, [
+                'label'    => 'Avatar',
+                'mapped'   => false,
                 'required' => false,
-
-                // unmapped fields can't define their validation using attributes
-                // in the associated entity, so you can use the PHP constraint classes
                 'constraints' => [
-                    new Assert\File(
-                        maxSize: '1024k',
-                    )
+                    new Assert\File(maxSize: '1024k'),
                 ],
             ])
             ->add('name')
-            ->add('level', IntegerType::class, [ // Securing front for users to avoid val < 0
-                'attr' => ['min' => 0]
+            ->add('level', IntegerType::class, [
+                'attr' => ['min' => 1, 'max' => 20],
+            ])
+            ->add('race', EntityType::class, [
+                'class'        => Race::class,
+                'choice_label' => 'name',
+                'placeholder'  => 'Choisir une race',
+            ])
+            ->add('characterClass', EntityType::class, [
+                'class'        => CharacterClass::class,
+                'choice_label' => 'name',
+                'placeholder'  => 'Choisir une classe',
             ])
             ->add('strength', IntegerType::class, [
-                'attr' => ['min' => 0]
+                'attr' => ['min' => 8, 'max' => 15],
+                'data' => 8
             ])
             ->add('dexterity', IntegerType::class, [
-                'attr' => ['min' => 0]
+                'attr' => ['min' => 8, 'max' => 15],
+                'data' => 8
             ])
             ->add('constitution', IntegerType::class, [
-                'attr' => ['min' => 0]
+                'attr' => ['min' => 8, 'max' => 15],
+                'data' => 8
             ])
             ->add('intelligence', IntegerType::class, [
-                'attr' => ['min' => 0]
+                'attr' => ['min' => 8, 'max' => 15],
+                'data' => 8
             ])
             ->add('wisdom', IntegerType::class, [
-                'attr' => ['min' => 0]
+                'attr' => ['min' => 8, 'max' => 15],
+                'data' => 8
             ])
             ->add('charisma', IntegerType::class, [
-                'attr' => ['min' => 0]
-            ])
-            ->add('healthPoints', IntegerType::class, [
-                'attr' => ['min' => 0]
+                'attr' => ['min' => 8, 'max' => 15],
+                'data' => 8
             ])
         ;
+        // healthPoints est retiré : il est calculé automatiquement dans le controller
     }
 
     public function configureOptions(OptionsResolver $resolver): void
