@@ -1,9 +1,18 @@
+{# index.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Character index{% endblock %}
 
+{% block title %}Character index{% endblock %}
 {% block body %}
+    {# Barre de recherche pour chercher un personnage par son nom #}
+    {% include 'character/search.html.twig' %}
+    {% include 'character/filter.html.twig' %}
+    
     <h1>Character index</h1>
+
+    
+    
 
     <table class="table">
         <thead>
@@ -17,6 +26,8 @@
                 <th>Intelligence</th>
                 <th>Wisdom</th>
                 <th>Charisma</th>
+                <th>Class</th
+                <th>Race</th>
                 <th>HealthPoints</th>
                 <th>Image</th>
                 <th>actions</th>
@@ -34,6 +45,8 @@
                 <td>{{ character.intelligence }}</td>
                 <td>{{ character.wisdom }}</td>
                 <td>{{ character.charisma }}</td>
+                <td>{{ character.characterClass.name }}</td>
+                <td>{{ character.race.name}}</td>
                 <td>{{ character.healthPoints }}</td>
                 <td>
                     {% if character.image %}

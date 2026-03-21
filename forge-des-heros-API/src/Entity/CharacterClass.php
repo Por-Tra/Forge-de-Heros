@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CharacterClassRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +24,24 @@ class CharacterClass
 
     #[ORM\Column]
     private ?int $healthDice = null;
+
+    /**
+     * @var Collection<int, Character>
+     */
+    #[ORM\OneToMany(mappedBy: 'characterClass', targetEntity: Character::class)]
+    private Collection $characters;
+
+    /**
+     * @var Collection<int, Skill>
+     */
+    #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'characterClasses')]
+    private Collection $skills;
+
+    public function __construct()
+    {
+        $this->characters = new ArrayCollection();
+        $this->skills = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -60,6 +80,59 @@ class CharacterClass
     public function setHealthDice(int $healthDice): static
     {
         $this->healthDice = $healthDice;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Character>
+     */
+    public function getCharacters(): Collection
+    {
+        return $this->characters;
+    }
+
+    public function addCharacter(Character $character): static
+    {
+        if (!$this->characters->contains($character)) {
+            $this->characters->add($character);
+            $character->setCharacterClass($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCharacter(Character $character): static
+    {
+        if ($this->characters->removeElement($character)) {
+            if ($character->getCharacterClass() === $this) {
+                $character->setCharacterClass(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getSkills(): Collection
+    {
+        return $this->skills;
+    }
+
+    public function addSkill(Skill $skill): static
+    {
+        if (!$this->skills->contains($skill)) {
+            $this->skills->add($skill);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): static
+    {
+        $this->skills->removeElement($skill);
 
         return $this;
     }
