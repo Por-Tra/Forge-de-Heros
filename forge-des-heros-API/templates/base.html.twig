@@ -4,93 +4,67 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
+
+        {# gestion du CSS #}
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        {% endblock %}
     </head>
     <body>
-        <header>
-            <nav aria-label="main navigation">
-                <h2>Navigation</h2>
+        <header class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="{{ path('app_home') }}" class="logo">Forge des Héros</a>
+            </div>
 
-                <section>
-                    <h3>Access Section</h3>
-                    <ul>
-                        {% if app.user %}
-                            <li><a href="{{ path('app_home') }}">Home</a></li>
-                            <li><a href="{{ path('app_logout') }}">Logout</a></li>
-                        {% else %}
-                            <li><a href="{{ path('app_login') }}">Login</a></li>
-                            <li><a href="{{ path('app_register') }}">Sign In</a></li>
-                        {% endif %}
-                    </ul>
-                </section>
+            <button class="nav-toggle" onclick="toggleMenu()">☰</button>
 
-                {% if is_granted('ROLE_USER') %}
-                    <section>
-                        <h3>User Section</h3>
-                        <details open>
-                            <summary>Character Subsection</summary>
-                            <ul>
-                                <li><a href="{{ path('app_character_index') }}">List of characters</a></li>
-                                <li><a href="{{ path('app_character_new') }}">Create a new character</a></li>
-                            </ul>
-                        </details>
+            <div class="nav-right" id="navMenu">
+                {% if app.user %}
+                    <a href="{{ path('app_home') }}">Home</a>
 
-                        <details>
-                            <summary>Party Subsection</summary>
-                            <ul>
-                                <li><a href="{{ path('app_party_index') }}">List of parties</a></li>
-                                <li><a href="{{ path('app_party_new') }}">Create a new party</a></li>
-                            </ul>
-                        </details>
-                    </section>
+                    {% if is_granted('ROLE_USER') %}
+                        <div class="dropdown">
+                            <button>Characters ▾</button>
+                            <div class="dropdown-content">
+                                <a href="{{ path('app_character_index') }}">List</a>
+                                <a href="{{ path('app_character_new') }}">Create</a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown">
+                            <button>Parties ▾</button>
+                            <div class="dropdown-content">
+                                <a href="{{ path('app_party_index') }}">List</a>
+                                <a href="{{ path('app_party_new') }}">Create</a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="dropdown admin">
+                            <button>Admin ▾</button>
+                            <div class="dropdown-content">
+                                <a href="{{ path('app_character_class_index') }}">Classes</a>
+                                <a href="{{ path('app_race_index') }}">Races</a>
+                                <a href="{{ path('app_skill_index') }}">Skills</a>
+                                <a href="{{ path('user_list') }}">Users</a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <a href="{{ path('app_logout') }}" class="logout">Logout</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}">Login</a>
+                    <a href="{{ path('app_register') }}" class="register">Register</a>
                 {% endif %}
-
-                {# ------------------------------------------------------------------------------------------------------------------------------------- #}
-
-                {% if is_granted('ROLE_ADMIN') %}
-                    <section>
-                        <h3>Admin Section</h3>
-
-                        <details>
-                            <summary>Character Class Subsection</summary>
-                            <ul>
-                                <li><a href="{{ path('app_character_class_index') }}">List of character classes</a></li>
-                                <li><a href="{{ path('app_character_class_new') }}">Create a new character class</a></li>
-                            </ul>
-                        </details>
-
-                        <details>
-                            <summary>Race Subsection</summary>
-                            <ul>
-                                <li><a href="{{ path('app_race_index') }}">List of races</a></li>
-                                <li><a href="{{ path('app_race_new') }}">Create a new race</a></li>
-                            </ul>
-                        </details>
-
-                        <details>
-                            <summary>Skill Subsection</summary>
-                            <ul>
-                                <li><a href="{{ path('app_skill_index') }}">List of skills</a></li>
-                                <li><a href="{{ path('app_skill_new') }}">Create a new skill</a></li>
-                            </ul>
-                        </details>
-
-                        <details>
-                             <summary>Sous-section User</summary>
-                                <ul>
-                                    <li><a href="{{ path('user_list') }}">/user</a></li>
-                                </ul>
-                        </details>
-
-                    </section>
-                {% endif %}
-            </nav>
-        </header>
+            </div>
+        </div>
+    </header>
 
         <main>
             {% block body %}{% endblock %}
