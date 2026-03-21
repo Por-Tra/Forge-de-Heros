@@ -5,6 +5,17 @@
 {% block body %}
     <h1>Party</h1>
 
+    {% for message in app.flashes('success') %}
+        <div style="padding: 8px; margin-bottom: 8px; color: #0f5132; background: #d1e7dd; border: 1px solid #badbcc;">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div style="padding: 8px; margin-bottom: 8px; color: #842029; background: #f8d7da; border: 1px solid #f5c2c7;">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <table class="table">
         <tbody>
             <tr>
@@ -21,10 +32,70 @@
             </tr>
             <tr>
                 <th>MaxSize</th>
-                <td>{{ party.maxSize }}</td>
+                <td>{{ party.maxSize is null ? 'Non definie' : party.maxSize }}</td>
+            </tr>
+            <tr>
+                <th>Membres</th>
+                <td>
+                    {{ party.characters|length }}
+                    {% if party.maxSize is not null %}
+                        / {{ party.maxSize }}
+                    {% endif %}
+                </td>
             </tr>
         </tbody>
     </table>
+
+    <h2>Personnages dans le groupe</h2>
+    <ul>
+        {% for character in party.characters %}
+            <li>
+                {{ character.name }} (niveau {{ character.level }})
+                {% if character.user %}
+                    - proprietaire: {{ character.user.username }}
+                {% endif %}
+            </li>
+        {% else %}
+            <li>Aucun personnage dans ce groupe.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Inscrire un de mes personnages</h2>
+    {% if joinableCharacters is empty %}
+        <p>Vous n'avez pas de personnage disponible a inscrire.</p>
+        <p><a href="{{ path('app_character_new') }}">Creer un personnage</a></p>
+    {% elseif partyIsFull %}
+        <p>Le groupe est complet.</p>
+    {% else %}
+        <ul>
+            {% for character in joinableCharacters %}
+                <li>
+                    {{ character.name }} (niveau {{ character.level }})
+                    <form method="post" action="{{ path('app_party_join', {'id': party.id, 'characterId': character.id}) }}" style="display: inline; margin-left: 8px;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('party_join_' ~ party.id ~ '_' ~ character.id) }}">
+                        <button type="submit">Inscrire</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h2>Retirer un de mes personnages</h2>
+    {% if leavableCharacters is empty %}
+        <p>Aucun de vos personnages n'est actuellement dans ce groupe.</p>
+    {% else %}
+        <ul>
+            {% for character in leavableCharacters %}
+                <li>
+                    {{ character.name }} (niveau {{ character.level }})
+                    <form method="post" action="{{ path('app_party_leave', {'id': party.id, 'characterId': character.id}) }}" style="display: inline; margin-left: 8px;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('party_leave_' ~ party.id ~ '_' ~ character.id) }}">
+                        <button type="submit">Desinscrire</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     <a href="{{ path('app_party_edit', {'id': party.id}) }}">edit</a>
 
