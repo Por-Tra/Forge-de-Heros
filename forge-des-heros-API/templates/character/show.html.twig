@@ -51,7 +51,7 @@
                 <th>Image</th>
                 <td>
                     {% if character.image %}
-                        <img src="{{ asset('uploads/avatars/' ~ character.image) }}" alt="Avatar de {{ character.name }}" width="160" height="160" style="object-fit: cover; border-radius: 10px;" />
+                        <img src="{{ asset('uploads/avatars/' ~ character.image) }}" alt="Avatar de {{ character.name }}" width="160" height="160" style="object-fit: cover;" />
                     {% else %}
                         <span>Aucun avatar</span>
                     {% endif %}
