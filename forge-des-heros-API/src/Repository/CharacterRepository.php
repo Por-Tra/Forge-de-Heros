@@ -52,6 +52,38 @@ class CharacterRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return Character[]
+     */
+    public function findForApi(?string $name, ?int $classId, ?int $raceId): array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->leftJoin('c.characterClass', 'cc')
+            ->leftJoin('c.race', 'r')
+            ->addSelect('cc', 'r')
+            ->orderBy('c.name', 'ASC');
+
+        if (null !== $name && '' !== trim($name)) {
+            $qb
+                ->andWhere('c.name LIKE :name')
+                ->setParameter('name', '%'.$name.'%');
+        }
+
+        if (null !== $classId) {
+            $qb
+                ->andWhere('cc.id = :classId')
+                ->setParameter('classId', $classId);
+        }
+
+        if (null !== $raceId) {
+            $qb
+                ->andWhere('r.id = :raceId')
+                ->setParameter('raceId', $raceId);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     // public function searchByName(string $value): array
     // {
     //     return $this->createQueryBuilder('c')
