@@ -67,7 +67,12 @@ class CharacterType extends AbstractType
                 'attr' => ['min' => 8, 'max' => 15],
                 'data' => 8
             ])
-        ;
+
+            //! supprimer ça quand on aura mis en place le calcul automatique des points de vie dans le controller
+            ->add('healthPoints', IntegerType::class, [
+                'attr' => ['min' => 1],
+                'data' => 10
+            ]);
         // healthPoints est retiré : il est calculé automatiquement dans le controller
     }
 
