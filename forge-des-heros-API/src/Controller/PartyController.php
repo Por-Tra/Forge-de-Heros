@@ -19,10 +19,16 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class PartyController extends AbstractController
 {
     #[Route(name: 'app_party_index', methods: ['GET'])]
-    public function index(PartyRepository $partyRepository): Response
+    public function index(Request $request, PartyRepository $partyRepository): Response
     {
+        $status = (string) $request->query->get('status', 'all');
+        if (!in_array($status, ['all', 'full', 'available'], true)) {
+            $status = 'all';
+        }
+
         return $this->render('party/index.html.twig', [
-            'parties' => $partyRepository->findAll(),
+            'parties' => $partyRepository->findByCapacityStatus($status),
+            'status' => $status,
         ]);
     }
 
