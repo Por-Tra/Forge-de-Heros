@@ -49,6 +49,9 @@ final class CharacterController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // The created character must belong to the currently authenticated user.
+            $character->setUser($this->getUser());
+
             /** @var UploadedFile|null $avatarFile */
             $avatarFile = $form->get('image')->getData();
 

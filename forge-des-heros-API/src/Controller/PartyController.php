@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Character;
 use App\Entity\Party;
 use App\Form\PartyType;
+use App\Repository\CharacterRepository;
 use App\Repository\PartyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,6 +34,7 @@ final class PartyController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $party->setCreator($this->getUser());
             $entityManager->persist($party);
             $entityManager->flush();
 
@@ -45,11 +48,122 @@ final class PartyController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_party_show', methods: ['GET'])]
-    public function show(Party $party): Response
+    public function show(Party $party, CharacterRepository $characterRepository): Response
     {
+        $user = $this->getUser();
+        $joinableCharacters = [];
+        $leavableCharacters = [];
+        $maxSize = $party->getMaxSize();
+        $partyIsFull = null !== $maxSize && $party->getCharacters()->count() >= $maxSize;
+
+        if ($user && method_exists($user, 'getId') && null !== $user->getId()) {
+            $userCharacters = $characterRepository->findBy(['user' => $user]);
+            foreach ($userCharacters as $character) {
+                if ($party->getCharacters()->contains($character)) {
+                    $leavableCharacters[] = $character;
+                } else {
+                    $joinableCharacters[] = $character;
+                }
+            }
+        }
+
         return $this->render('party/show.html.twig', [
             'party' => $party,
+            'partyIsFull' => $partyIsFull,
+            'joinableCharacters' => $joinableCharacters,
+            'leavableCharacters' => $leavableCharacters,
         ]);
+    }
+
+    #[Route('/{id}/join/{characterId}', name: 'app_party_join', methods: ['POST'])]
+    public function join(
+        Request $request,
+        Party $party,
+        int $characterId,
+        CharacterRepository $characterRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $character = $characterRepository->find($characterId);
+
+        if (!$character instanceof Character) {
+            $this->addFlash('error', 'Personnage introuvable.');
+
+            return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
+        }
+
+        if (!$this->isCsrfTokenValid('party_join_'.$party->getId().'_'.$character->getId(), $request->getPayload()->getString('_token'))) {
+            $this->addFlash('error', 'Jeton de securite invalide.');
+
+            return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
+        }
+
+        $currentUser = $this->getUser();
+        if (!$currentUser || !method_exists($currentUser, 'getId') || $character->getUser()?->getId() !== $currentUser->getId()) {
+            $this->addFlash('error', 'Ce personnage ne vous appartient pas.');
+
+            return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
+        }
+
+        if ($party->getCharacters()->contains($character)) {
+            $this->addFlash('error', 'Ce personnage est deja dans ce groupe.');
+
+            return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
+        }
+
+        $maxSize = $party->getMaxSize();
+        if (null !== $maxSize && $party->getCharacters()->count() >= $maxSize) {
+            $this->addFlash('error', 'Le groupe est complet.');
+
+            return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
+        }
+
+        $party->addCharacter($character);
+        $entityManager->flush();
+        $this->addFlash('success', 'Personnage inscrit au groupe.');
+
+        return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
+    }
+
+    #[Route('/{id}/leave/{characterId}', name: 'app_party_leave', methods: ['POST'])]
+    public function leave(
+        Request $request,
+        Party $party,
+        int $characterId,
+        CharacterRepository $characterRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $character = $characterRepository->find($characterId);
+
+        if (!$character instanceof Character) {
+            $this->addFlash('error', 'Personnage introuvable.');
+
+            return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
+        }
+
+        if (!$this->isCsrfTokenValid('party_leave_'.$party->getId().'_'.$character->getId(), $request->getPayload()->getString('_token'))) {
+            $this->addFlash('error', 'Jeton de securite invalide.');
+
+            return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
+        }
+
+        $currentUser = $this->getUser();
+        if (!$currentUser || !method_exists($currentUser, 'getId') || $character->getUser()?->getId() !== $currentUser->getId()) {
+            $this->addFlash('error', 'Ce personnage ne vous appartient pas.');
+
+            return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
+        }
+
+        if (!$party->getCharacters()->contains($character)) {
+            $this->addFlash('error', 'Ce personnage n\'est pas dans ce groupe.');
+
+            return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
+        }
+
+        $party->removeCharacter($character);
+        $entityManager->flush();
+        $this->addFlash('success', 'Personnage retire du groupe.');
+
+        return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
     }
 
     #[Route('/{id}/edit', name: 'app_party_edit', methods: ['GET', 'POST'])]
