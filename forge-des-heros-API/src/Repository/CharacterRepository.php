@@ -85,6 +85,29 @@ class CharacterRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    // Pour les filtre des perso par class et race
+    public function findWithFilters(?string $search, ?string $classId, ?string $raceId): array
+    {
+        $qb = $this->createQueryBuilder('c') -> leftJoin('c.characterClass', 'cc') -> leftJoin('c.race', 'r');
+
+        if ($search) {
+            $qb->andWhere('c.name LIKE :search')
+            ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($classId) {
+            $qb->andWhere('cc.id = :classId')
+            ->setParameter('classId', $classId);
+        }
+
+        if ($raceId) {
+            $qb->andWhere('r.id = :raceId')
+            ->setParameter('raceId', $raceId);
+        }
+
+        return $qb->orderBy('c.name', 'ASC')->getQuery()->getResult();
+    }
+
     // public function searchByName(string $value): array
     // {
     //     return $this->createQueryBuilder('c')
