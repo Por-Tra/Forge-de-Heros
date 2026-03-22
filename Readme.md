@@ -101,7 +101,7 @@ L'application permet de gérer des personnages, leurs caractéristiques, leurs c
 
 ```bash
 git clone https://github.com/Por-Tra/Forge-de-Heros.git
-cd Forge-des-Heros
+cd forge-des-heros-API
 
 composer install
 cp .env.local .env
@@ -121,7 +121,7 @@ symfony server:start
 ### Frontend React
 
 ```bash
-cd frontend
+cd forge-de-heros-front-React
 
 npm install
 npm run dev
@@ -139,19 +139,15 @@ http://localhost:8000/api/v1
 
 ### Routes principales
 
-| Route            | Description           |
-| ---------------- | --------------------- |
-| /race            | Liste des races       |
-| /character/class | Liste des classes     |
-| /skills          | Liste des compétences |
-| /character       | Liste des personnages |
-| /party           | Liste des groupes     |
+| Route            | Description           | Accessibilité         |
+| ---------------- | --------------------- |                       |
+| /race            | Liste des races       | Admin                 |
+| /character/class | Liste des classes     | Admin                 |
+| /skills          | Liste des compétences | Admin                 |
+| /character       | Liste des personnages | User                  |
+| /party           | Liste des groupes     | User                  |
 
-### Exemple
 
-```bash
-GET /api/v1/characters?name=arthur&class=guerrier
-```
 
 ---
 
@@ -189,13 +185,13 @@ HP = dice_max + floor((constitution - 10) / 2)
 ## Structure du projet
 
 ```
-/backend
+/forge-des-heros-API
  ├── src/
  ├── migrations/
  ├── fixtures/
  └── config/
 
-/frontend
+/forge-de-heros-front-React
  ├── src/
  ├── components/
  └── pages/
