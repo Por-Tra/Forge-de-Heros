@@ -12,14 +12,37 @@ function Characters() {
   const [sort, setSort] = useState('character_name');
 
   useEffect(() => {
+    const normalizeCharacter = (src) => {
+      const item = src?.data ?? src ?? {};
+      return {
+        // keep original fields, but normalize names used in the app
+        ...item,
+        characterClass: item.characterClass ?? item.class ?? null,
+        strength: item.stats?.strength ?? item.strength ?? 0,
+        dexterity: item.stats?.dexterity ?? item.dexterity ?? 0,
+        constitution: item.stats?.constitution ?? item.constitution ?? 0,
+        intelligence: item.stats?.intelligence ?? item.intelligence ?? 0,
+        wisdom: item.stats?.wisdom ?? item.wisdom ?? 0,
+        charisma: item.stats?.charisma ?? item.charisma ?? 0,
+        skills: item.skills ?? [],
+        parties: item.parties ?? [],
+      };
+    };
+
     const fetchCharacters = async () => {
       try {
         setLoading(true);
         setError(null);
         const data = await getCharacters();
-        setCharacters(data);
+        console.debug('getCharacters response:', data);
+        // extraire la liste quel que soit le shape (API retourne { data: [...] })
+        const rawList = Array.isArray(data)
+          ? data
+          : data?.data ?? data?.hydra?.member ?? data?.results ?? data?.characters ?? [];
+        const list = rawList.map(normalizeCharacter);
+        setCharacters(list);
       } catch (err) {
-        setError(err.message);
+        setError(err?.message ?? String(err));
       } finally {
         setLoading(false);
       }
@@ -33,9 +56,7 @@ function Characters() {
   const charactersFiltered = characters.filter((character) => {
     if (!q) return true;
     const name = String(character.name ?? '').toLowerCase();
-    const className = String(
-      character.characterClass?.name ?? '',
-    ).toLowerCase();
+    const className = String(character.characterClass?.name ?? '').toLowerCase();
     const raceName = String(character.race?.name ?? '').toLowerCase();
     return name.includes(q) || className.includes(q) || raceName.includes(q);
   });
@@ -125,11 +146,7 @@ function Characters() {
         ) : (
           <div>
             {charactersSorted.map((character) => (
-              <CharacterCard
-                key={character.id}
-                characterID={character.id}
-                data={character}
-              />
+              <CharacterCard key={character.id} characterID={character.id} />
             ))}
           </div>
         )}
