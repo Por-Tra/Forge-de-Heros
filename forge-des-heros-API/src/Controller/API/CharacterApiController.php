@@ -13,55 +13,70 @@ final class CharacterApiController extends AbstractController
     private static function normalizeParties(iterable $parties): array
     {
         $normalized = [];
-
         foreach ($parties as $party) {
             $normalized[] = [
-                'id' => $party->getId(),
-                'name' => $party->getName(),
+                'id'          => $party->getId(),
+                'name'        => $party->getName(),
                 'description' => $party->getDescription(),
-                'maxSize' => $party->getMaxSize(),
+                'maxSize'     => $party->getMaxSize(),
                 'currentSize' => $party->getCharacters()->count(),
             ];
         }
-
         return $normalized;
+    }
+
+    private static function normalizeClass(?object $class): ?array
+    {
+        if (!$class) return null;
+        return [
+            'id'          => $class->getId(),
+            'name'        => $class->getName(),
+            'description' => $class->getDescription(),
+            'healthDice'  => $class->getHealthDice(),
+        ];
+    }
+
+    private static function normalizeRace(?object $race): ?array
+    {
+        if (!$race) return null;
+        return [
+            'id'          => $race->getId(),
+            'name'        => $race->getName(),
+            'description' => $race->getDescription(),
+        ];
     }
 
     #[Route('/api/v1/characters', methods: ['GET'])]
     public function index(Request $request, CharacterRepository $repo): JsonResponse
     {
-        $name = $request->query->get('name');
+        $name    = $request->query->get('name');
         $classId = $request->query->getInt('class', 0);
-        $raceId = $request->query->getInt('race', 0);
+        $raceId  = $request->query->getInt('race', 0);
 
         $characters = $repo->findForApi(
             is_string($name) ? $name : null,
             $classId > 0 ? $classId : null,
-            $raceId > 0 ? $raceId : null
+            $raceId  > 0 ? $raceId  : null,
         );
 
-        $data = array_map(static fn ($character) => [
-            'id' => $character->getId(),
-            'name' => $character->getName(),
-            'level' => $character->getLevel(),
-            'class' => $character->getCharacterClass() ? [
-                'id' => $character->getCharacterClass()->getId(),
-                'name' => $character->getCharacterClass()->getName(),
-            ] : null,
-            'race' => $character->getRace() ? [
-                'id' => $character->getRace()->getId(),
-                'name' => $character->getRace()->getName(),
-            ] : null,
-            'parties' => self::normalizeParties($character->getParties()),
+        $data = array_map(fn($c) => [
+            'id'           => $c->getId(),
+            'name'         => $c->getName(),
+            'level'        => $c->getLevel(),
+            'healthPoints' => $c->getHealthPoints(),
+            'image'        => $c->getImage(),
+            'class'        => self::normalizeClass($c->getCharacterClass()),
+            'race'         => self::normalizeRace($c->getRace()),
         ], $characters);
 
         return $this->json([
             'data' => $data,
             'meta' => [
+                'total'   => count($data),
                 'filters' => [
-                    'name' => is_string($name) ? $name : null,
+                    'name'  => is_string($name) ? $name : null,
                     'class' => $classId > 0 ? $classId : null,
-                    'race' => $raceId > 0 ? $raceId : null,
+                    'race'  => $raceId  > 0 ? $raceId  : null,
                 ],
             ],
         ]);
@@ -75,30 +90,37 @@ final class CharacterApiController extends AbstractController
             return $this->json(['error' => 'Character not found'], 404);
         }
 
+        // Compétences issues de la classe du personnage
+        $skills = [];
+        if ($character->getCharacterClass()) {
+            foreach ($character->getCharacterClass()->getSkills() as $skill) {
+                $skills[] = [
+                    'id'      => $skill->getId(),
+                    'name'    => $skill->getName(),
+                    'ability' => $skill->getAbility(),
+                ];
+            }
+        }
+
         return $this->json([
             'data' => [
-                'id' => $character->getId(),
-                'name' => $character->getName(),
-                'level' => $character->getLevel(),
-                'stats' => [
-                    'strength' => $character->getStrength(),
-                    'dexterity' => $character->getDexterity(),
+                'id'           => $character->getId(),
+                'name'         => $character->getName(),
+                'level'        => $character->getLevel(),
+                'healthPoints' => $character->getHealthPoints(),
+                'image'        => $character->getImage(),
+                'stats'        => [
+                    'strength'     => $character->getStrength(),
+                    'dexterity'    => $character->getDexterity(),
                     'constitution' => $character->getConstitution(),
                     'intelligence' => $character->getIntelligence(),
-                    'wisdom' => $character->getWisdom(),
-                    'charisma' => $character->getCharisma(),
-                    'healthPoints' => $character->getHealthPoints(),
+                    'wisdom'       => $character->getWisdom(),
+                    'charisma'     => $character->getCharisma(),
                 ],
-                'image' => $character->getImage(),
-                'class' => $character->getCharacterClass() ? [
-                    'id' => $character->getCharacterClass()->getId(),
-                    'name' => $character->getCharacterClass()->getName(),
-                ] : null,
-                'race' => $character->getRace() ? [
-                    'id' => $character->getRace()->getId(),
-                    'name' => $character->getRace()->getName(),
-                ] : null,
-                'parties' => self::normalizeParties($character->getParties()),
+                'class'        => self::normalizeClass($character->getCharacterClass()),
+                'race'         => self::normalizeRace($character->getRace()),
+                'skills'       => $skills,
+                'parties'      => self::normalizeParties($character->getParties()),
             ],
         ]);
     }

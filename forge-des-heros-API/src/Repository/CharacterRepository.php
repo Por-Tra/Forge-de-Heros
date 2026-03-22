@@ -16,30 +16,6 @@ class CharacterRepository extends ServiceEntityRepository
         parent::__construct($registry, Character::class);
     }
 
-//    /**
-//     * @return Character[] Returns an array of Character objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Character
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 
 
     public function searchByName(string $name): array
@@ -59,30 +35,24 @@ class CharacterRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('c')
             ->leftJoin('c.characterClass', 'cc')
-            ->leftJoin('c.race', 'r')
-            ->leftJoin('c.parties', 'p')
-            ->addSelect('cc', 'r', 'p')
-            ->orderBy('c.name', 'ASC');
+            ->leftJoin('c.race', 'r');
 
-        if (null !== $name && '' !== trim($name)) {
-            $qb
-                ->andWhere('c.name LIKE :name')
-                ->setParameter('name', '%'.$name.'%');
+        if ($name) {
+            $qb->andWhere('c.name LIKE :name')
+            ->setParameter('name', '%' . $name . '%');
         }
 
-        if (null !== $classId) {
-            $qb
-                ->andWhere('cc.id = :classId')
-                ->setParameter('classId', $classId);
+        if ($classId) {
+            $qb->andWhere('cc.id = :classId')
+            ->setParameter('classId', $classId);
         }
 
-        if (null !== $raceId) {
-            $qb
-                ->andWhere('r.id = :raceId')
-                ->setParameter('raceId', $raceId);
+        if ($raceId) {
+            $qb->andWhere('r.id = :raceId')
+            ->setParameter('raceId', $raceId);
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->orderBy('c.name', 'ASC')->getQuery()->getResult();
     }
 
     // Pour les filtre des perso par class et race
@@ -108,13 +78,6 @@ class CharacterRepository extends ServiceEntityRepository
         return $qb->orderBy('c.name', 'ASC')->getQuery()->getResult();
     }
 
-    // public function searchByName(string $value): array
-    // {
-    //     return $this->createQueryBuilder('c')
-    //         ->andWhere('c.name LIKE :val')
-    //         ->setParameter('val', '%' . $value . '%')
-    //         ->getQuery()
-    //         ->getResult();
-    // }
+
 
 }
