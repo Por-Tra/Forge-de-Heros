@@ -17,7 +17,6 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Name</th>
                         <th>Level</th>
                         <th>Strength</th>
@@ -36,7 +35,6 @@
                 <tbody>
                 {% for character in userCharacters %}
                     <tr>
-                        <td>{{ character.id }}</td>
                         <td>{{ character.name }}</td>
                         <td>{{ character.level }}</td>
                         <td>{{ character.strength }}</td>
@@ -85,7 +83,6 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Name</th>
                         <th>Creator</th>
                         <th>Level</th>
@@ -105,7 +102,6 @@
                 <tbody>
                 {% for character in allCharacters %}
                     <tr>
-                        <td>{{ character.id }}</td>
                         <td>{{ character.name }}</td>
                         <td>{{ character.user.username }}</td>
                         <td>{{ character.level }}</td>

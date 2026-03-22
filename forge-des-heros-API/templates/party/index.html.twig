@@ -29,7 +29,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Creator</th>
@@ -41,7 +40,6 @@
         <tbody>
         {% for party in parties %}
             <tr>
-                <td>{{ party.id }}</td>
                 <td>{{ party.name }}</td>
                 <td>{{ party.description }}</td>
                 <td>{{ party.creator ? party.creator.username : 'Inconnu' }}</td>

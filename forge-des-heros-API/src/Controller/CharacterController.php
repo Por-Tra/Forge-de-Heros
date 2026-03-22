@@ -141,7 +141,7 @@ final class CharacterController extends AbstractController
     {
         // Vérifier que l'utilisateur est le propriétaire du personnage
         if ($character->getUser() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Vous ne pouvez éditer que vos propres personnages.');
+            return $this->redirectToRoute('app_access_denied');
         }
 
         $form = $this->createForm(CharacterType::class, $character);
@@ -206,7 +206,7 @@ final class CharacterController extends AbstractController
     {
         // Vérifier que l'utilisateur est le propriétaire du personnage
         if ($character->getUser() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Vous ne pouvez supprimer que vos propres personnages.');
+            return $this->redirectToRoute('app_access_denied');
         }
 
         if ($this->isCsrfTokenValid('delete'.$character->getId(), $request->getPayload()->getString('_token'))) {
