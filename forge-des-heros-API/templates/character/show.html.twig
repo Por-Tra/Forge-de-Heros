@@ -44,6 +44,24 @@
                 <td>{{ character.healthPoints }}</td>
             </tr>
             <tr>
+                <th>Class</th>
+                <td>{{ character.characterClass ? character.characterClass.name : 'Aucune classe' }}</td>
+            </tr>
+            <tr>
+                <th>Compétences de classe</th>
+                <td>
+                    {% if character.characterClass and character.characterClass.skills|length > 0 %}
+                        <ul style="margin: 0; padding-left: 18px;">
+                            {% for skill in character.characterClass.skills %}
+                                <li>{{ skill.name }} ({{ skill.ability }})</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <span>Aucune compétence associée</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
                 <th>Image</th>
                 <td>
                     {% if character.image %}

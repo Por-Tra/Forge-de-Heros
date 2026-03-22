@@ -250,6 +250,29 @@ form[method="get"] select {
     margin-bottom: 0;
 }
 
+.page-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    margin-top: 0.35rem;
+}
+
+.page-actions > a {
+    display: inline-flex;
+    align-items: center;
+}
+
+.inline-delete-form {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+}
+
+.inline-delete-form .btn {
+    margin: 0;
+}
+
 .table,
 table {
     width: 100%;

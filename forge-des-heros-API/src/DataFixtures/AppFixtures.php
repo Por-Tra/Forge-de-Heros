@@ -15,6 +15,7 @@ class AppFixtures extends Fixture
         $this->loadRaces($manager);
         $this->loadCharacterClasses($manager);
         $this->loadSkills($manager);
+        $this->assignSkillsToClasses($manager);
 
         $manager->flush();
     }
@@ -101,6 +102,38 @@ class AppFixtures extends Fixture
                 ->setAbility($skillData['ability']);
 
             $manager->persist($skill);
+        }
+    }
+
+    private function assignSkillsToClasses(ObjectManager $manager): void
+    {
+        $map = [
+            'Guerrier' => ['Athlétisme', 'Intimidation', 'Survie'],
+            'Mage'     => ['Arcanes', 'Histoire', 'Investigation'],
+            'Voleur'   => ['Acrobaties', 'Discrétion', 'Escamotage'],
+            'Barbare'  => ['Athlétisme', 'Intimidation', 'Survie'],
+            'Barde'    => ['Représentation', 'Persuasion', 'Tromperie'],
+            'Clerc'    => ['Religion', 'Médecine', 'Perspicacité'],
+            'Druide'   => ['Nature', 'Dressage', 'Survie'],
+            'Paladin'  => ['Religion', 'Intimidation', 'Persuasion'],
+            'Ranger'   => ['Survie', 'Perception', 'Nature'],
+            'Sorcier'  => ['Arcanes', 'Tromperie', 'Persuasion'],
+        ];
+
+        foreach ($map as $className => $skillNames) {
+            $characterClass = $manager->getRepository(CharacterClass::class)->findOneBy(['name' => $className]);
+            if (!$characterClass) {
+                continue;
+            }
+
+            foreach ($skillNames as $skillName) {
+                $skill = $manager->getRepository(Skill::class)->findOneBy(['name' => $skillName]);
+                if ($skill) {
+                    $characterClass->addSkill($skill);
+                }
+            }
+
+            $manager->persist($characterClass);
         }
     }
 }
