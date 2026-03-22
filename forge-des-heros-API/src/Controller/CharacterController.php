@@ -30,11 +30,27 @@ final class CharacterController extends AbstractController
         $classId = $request->query->get('class');
         $raceId  = $request->query->get('race');
 
-        // Filter les perso en fonction des paramètre -> voir CharacterRepository.findWithFilters()
-        $characters = $characterRepository->findWithFilters($search, $classId, $raceId);
+        // Récupère seulement les personnages de l'utilisateur connecté
+        $userCharacters = $characterRepository->findByUser(
+            $this->getUser(),
+            is_string($search) ? $search : null,
+            is_string($classId) && $classId ? (int)$classId : null,
+            is_string($raceId) && $raceId ? (int)$raceId : null
+        );
+
+        // Récupère TOUS les personnages (avec filtres appliqués)
+        $allCharacters = $characterRepository->findWithFilters(
+            is_string($search) ? $search : null,
+            is_string($classId) && $classId ? $classId : null,
+            is_string($raceId) && $raceId ? $raceId : null
+        );
 
         return $this->render('character/index.html.twig', [
-            'characters' => $characters, 'classes'=> $characterClassRepository->findAll(), 'races'=> $raceRepository->findAll()]);
+            'userCharacters' => $userCharacters,
+            'allCharacters' => $allCharacters,
+            'classes'=> $characterClassRepository->findAll(), 
+            'races'=> $raceRepository->findAll()
+        ]);
     }
 
     // Ajouter un nouveaux personnage
@@ -56,6 +72,9 @@ final class CharacterController extends AbstractController
 
             // TODO : Calculer les PV automatiquement ICI
             //! PV = maximum du dé de vie + modificateur de Constitution
+            $constitutionModifier = (int) floor(($character->getConstitution() - 10) / 2);
+            $healthDice = $character->getCharacterClass()?->getHealthDice() ?? 6;
+            $character->setHealthPoints($healthDice + $constitutionModifier);
 
             /** @var UploadedFile|null $avatarFile */
             $avatarFile = $form->get('image')->getData();
@@ -92,6 +111,11 @@ final class CharacterController extends AbstractController
             }
 
             $entityManager->persist($character);
+
+            // Recalcul des HP si les stats ont changé
+            $constitutionModifier = (int) floor(($character->getConstitution() - 10) / 2);
+            $healthDice = $character->getCharacterClass()?->getHealthDice() ?? 6;
+            $character->setHealthPoints($healthDice + $constitutionModifier);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_character_index', [], Response::HTTP_SEE_OTHER);
@@ -103,9 +127,7 @@ final class CharacterController extends AbstractController
     #[Route('/{id}', name: 'app_character_show', methods: ['GET'])]
     public function show(Character $character): Response
     {
-        return $this->render('character/show.html.twig', [
-            'character' => $character,
-        ]);
+        return $this->render('character/show.html.twig', ['character' => $character]);
     }
 
     #[Route('/{id}/edit', name: 'app_character_edit', methods: ['GET', 'POST'])]
@@ -117,6 +139,11 @@ final class CharacterController extends AbstractController
         #[Autowire('%avatars_directory%')] string $avatarsDirectory,
     ): Response
     {
+        // Vérifier que l'utilisateur est le propriétaire du personnage
+        if ($character->getUser() !== $this->getUser()) {
+            return $this->redirectToRoute('app_access_denied');
+        }
+
         $form = $this->createForm(CharacterType::class, $character);
         $form->handleRequest($request);
 
@@ -177,6 +204,11 @@ final class CharacterController extends AbstractController
         #[Autowire('%avatars_directory%')] string $avatarsDirectory,
     ): Response
     {
+        // Vérifier que l'utilisateur est le propriétaire du personnage
+        if ($character->getUser() !== $this->getUser()) {
+            return $this->redirectToRoute('app_access_denied');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$character->getId(), $request->getPayload()->getString('_token'))) {
             $avatar = $character->getImage();
             if ($avatar) {
@@ -207,6 +239,20 @@ final class CharacterController extends AbstractController
         return $this->render('character/search.html.twig', [
             'characters' => $characters,
             'query' => $query,
+        ]);
+    }
+
+    public function showUserCharacters(CharacterRepository $characterRepository): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException('You must be logged in to view your characters.');
+        }
+
+        $characters = $characterRepository->findBy(['user' => $user], ['name' => 'ASC']);
+
+        return $this->render('character/user_characters.html.twig', [
+            'characters' => $characters,
         ]);
     }
 

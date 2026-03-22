@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  background: linear-gradient(
+    180deg,
+    rgba(18, 13, 10, 0.95),
+    rgba(12, 8, 6, 0.98)
+  );
+  border-bottom: 2px solid rgba(183, 134, 45, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.btnNavbar {
+  padding: 10px 20px;
+  background: linear-gradient(180deg, #b7862d, #8a5b17);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(138, 91, 23, 0.4);
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease;
+}
+
+.btnNavbar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(138, 91, 23, 0.5);
+  background: linear-gradient(180deg, #c89532, #9a6419);
+}
+
+.btnNavbar:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(138, 91, 23, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  .btnNavbar {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+  }
+}

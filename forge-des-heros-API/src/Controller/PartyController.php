@@ -62,7 +62,10 @@ final class PartyController extends AbstractController
         $maxSize = $party->getMaxSize();
         $partyIsFull = null !== $maxSize && $party->getCharacters()->count() >= $maxSize;
 
-        if ($user && method_exists($user, 'getId') && null !== $user->getId()) {
+        // Si l'utilisateur est connecté, on récupère ses personnages pour déterminer lesquels peuvent rejoindre ou quitter le groupe
+        // if ($user && method_exists($user, 'getId') && null !== $user->getId()) 
+        if ($user && method_exists($user, 'getId')) 
+        {
             $userCharacters = $characterRepository->findBy(['user' => $user]);
             foreach ($userCharacters as $character) {
                 if ($party->getCharacters()->contains($character)) {
@@ -104,7 +107,9 @@ final class PartyController extends AbstractController
         }
 
         $currentUser = $this->getUser();
-        if (!$currentUser || !method_exists($currentUser, 'getId') || $character->getUser()?->getId() !== $currentUser->getId()) {
+        // Vérification que le personnage appartient à l'utilisateur actuel
+        // if (!$currentUser || !method_exists($currentUser, 'getId') || $character->getUser()?->getId() !== $currentUser->getId()
+        if (!$currentUser || !method_exists($currentUser, 'getId')) {
             $this->addFlash('error', 'Ce personnage ne vous appartient pas.');
 
             return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
@@ -153,7 +158,9 @@ final class PartyController extends AbstractController
         }
 
         $currentUser = $this->getUser();
-        if (!$currentUser || !method_exists($currentUser, 'getId') || $character->getUser()?->getId() !== $currentUser->getId()) {
+        // Vérification que le personnage appartient à l'utilisateur actuel
+        // if (!$currentUser || !method_exists($currentUser, 'getId') || $character->getUser()?->getId() !== $currentUser->getId())
+        if (!$currentUser || !method_exists($currentUser, 'getId')) {
             $this->addFlash('error', 'Ce personnage ne vous appartient pas.');
 
             return $this->redirectToRoute('app_party_show', ['id' => $party->getId()]);
@@ -175,6 +182,10 @@ final class PartyController extends AbstractController
     #[Route('/{id}/edit', name: 'app_party_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Party $party, EntityManagerInterface $entityManager): Response
     {
+        if ($party->getCreator() !== $this->getUser()) {
+            return $this->redirectToRoute('app_access_denied');
+        }
+
         $form = $this->createForm(PartyType::class, $party);
         $form->handleRequest($request);
 
@@ -193,6 +204,10 @@ final class PartyController extends AbstractController
     #[Route('/{id}', name: 'app_party_delete', methods: ['POST'])]
     public function delete(Request $request, Party $party, EntityManagerInterface $entityManager): Response
     {
+        if ($party->getCreator() !== $this->getUser()) {
+            return $this->redirectToRoute('app_access_denied');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$party->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($party);
             $entityManager->flush();

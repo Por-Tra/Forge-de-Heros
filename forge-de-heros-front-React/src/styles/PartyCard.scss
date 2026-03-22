@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&display=swap');
 
-.character-card {
+.party-card {
   /* Taille + mise en page */
-  width: 320px;
+  width: 100%;
+  max-width: 360px;
   background: linear-gradient(180deg, #f5ecd8 0%, #efe1b8 50%, #e9d6a0 100%);
   border-radius: 14px;
   padding: 18px;
@@ -15,11 +16,20 @@
   overflow: hidden;
   font-family: 'Cormorant Garamond', serif;
   color: #2b170a;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+/* Variante pour groupe complet */
+.party-card--full {
+  background: linear-gradient(180deg, #e8dcc8 0%, #d9c9a8 50%, #cbb890 100%);
+  opacity: 0.85;
 }
 
 /* Ornement en coin (pseudo-éléments) */
-.character-card::before,
-.character-card::after {
+.party-card::before,
+.party-card::after {
   content: '';
   position: absolute;
   width: 64px;
@@ -34,24 +44,32 @@
   transform: rotate(25deg);
   opacity: 0.85;
 }
-.character-card::before {
+.party-card::before {
   top: -18px;
   left: -18px;
 }
-.character-card::after {
+.party-card::after {
   bottom: -18px;
   right: -18px;
   transform: rotate(-25deg);
 }
 
+.party-card:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.68),
+    inset 0 -6px 18px rgba(0, 0, 0, 0.18);
+}
+
 /* En-tête avec nom */
-.character-card__header {
+.party-card__header {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 12px;
 }
-.character-card__name {
+
+.party-card__name {
   font-family: 'Cinzel', serif;
   font-size: 1.3rem;
   font-weight: 700;
@@ -60,12 +78,11 @@
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
-/* Avatar */
-.character-card__avatar {
+/* Icône du groupe */
+.party-card__icon {
   width: 72px;
   height: 72px;
   border-radius: 8px;
-  object-fit: cover;
   border: 3px solid rgba(60, 38, 18, 0.9);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   background: linear-gradient(
@@ -73,22 +90,14 @@
     rgba(255, 255, 255, 0.06),
     rgba(0, 0, 0, 0.04)
   );
-}
-
-/* Avatar placeholder */
-.character-card__avatar--placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #efe6cc, #e7d8b0);
-  color: #5a3f10;
-  font-weight: 700;
-  font-size: 1.5rem;
-  font-family: 'Cinzel', serif;
+  font-size: 2.5rem;
 }
 
 /* Corps de la carte */
-.character-card__body {
+.party-card__body {
   font-size: 0.95rem;
   line-height: 1.4;
   padding: 8px 4px 14px 4px;
@@ -97,13 +106,14 @@
 }
 
 /* Liste d'attributs stylée */
-.character-card__stats {
+.party-card__stats {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-top: 6px;
 }
-.character-card__stat {
+
+.party-card__stat {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -113,11 +123,13 @@
   border: 1px solid rgba(60, 38, 18, 0.06);
   font-weight: 500;
 }
-.character-card__stat span:first-child {
+
+.party-card__stat span:first-child {
   color: #59402a;
   font-size: 0.95rem;
 }
-.character-card__stat span.value {
+
+.party-card__stat span.value {
   color: #1f1209;
   background: linear-gradient(180deg, #f6e7c2, #e9d39a);
   padding: 2px 8px;
@@ -127,8 +139,18 @@
   font-size: 0.9rem;
 }
 
+.party-card__stat span.value--full {
+  background: linear-gradient(180deg, #ddc9a8, #cbb390);
+  color: #5a4428;
+}
+
+.party-card__stat span.value--available {
+  background: linear-gradient(180deg, #c8e8c8, #a8d9a8);
+  color: #1a4a1a;
+}
+
 /* Lien / bouton */
-.character-card__link {
+.party-card__link {
   display: inline-block;
   margin-top: 12px;
   padding: 8px 12px;
@@ -144,13 +166,14 @@
     transform 120ms ease,
     box-shadow 120ms ease;
 }
-.character-card__link:hover {
+
+.party-card__link:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 22px rgba(138, 91, 23, 0.35);
 }
 
 /* Petite rune décorative sous le nom */
-.character-card__rune {
+.party-card__rune {
   width: 100%;
   height: 10px;
   margin-top: -6px;
@@ -165,12 +188,13 @@
 
 /* Responsive */
 @media (max-width: 420px) {
-  .character-card {
+  .party-card {
     width: 100%;
     padding: 14px;
   }
-  .character-card__avatar {
+  .party-card__icon {
     width: 64px;
     height: 64px;
+    font-size: 2rem;
   }
 }

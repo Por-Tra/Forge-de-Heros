@@ -1,22 +1,13 @@
-import NavBar from "./NavBar"
+import NavBar from './NavBar';
+import '../styles/Header.scss';
 
-function Header(){
-
-    return(
-        <div>
-            <head>
-                <meta charset="UTF-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <title>Forge de Heros</title>
-            </head>
-
-            <NavBar />
-
-        </div>
-        
-
-    )
-
+function Header() {
+  return (
+    <header className="header">
+      <h1 className="header__title">Forge de Héros</h1>
+      <NavBar />
+    </header>
+  );
 }
 
-export default Header
+export default Header;
