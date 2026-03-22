@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&display=swap');
+
+/* Scope : n'affecte que la page Parties via .parties-page */
+.parties-page {
+  /* Thème générale — ambiance donjon & parchemin */
+  min-height: 100vh;
+  background: radial-gradient(
+    circle at 10% 10%,
+    #0f0b08 0%,
+    #0b0a0a 25%,
+    #0a0a0a 100%
+  );
+  color: #e9d6a0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 24px;
+  box-sizing: border-box;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* Titre */
+.parties-page h1 {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  margin: 12px auto 6px auto;
+  text-align: center;
+  box-sizing: border-box;
+  font-family: 'Cinzel', serif;
+  font-size: 2.1rem;
+  color: #f0d99b;
+  letter-spacing: 1px;
+  text-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.75),
+    0 1px 0 rgba(255, 255, 255, 0.03);
+  position: relative;
+}
+.parties-page h1::before {
+  content: '⚔';
+  margin-right: 10px;
+  color: #caa54a;
+  font-size: 1.05rem;
+  vertical-align: middle;
+}
+
+/* Filtre */
+.parties-filter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 18px auto;
+  max-width: 600px;
+}
+
+.parties-filter label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: #e9d6a0;
+  font-size: 1rem;
+  padding: 10px 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.04)
+  );
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: background 160ms ease;
+}
+
+.parties-filter label:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(0, 0, 0, 0.06)
+  );
+}
+
+.parties-filter input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  accent-color: #b7862d;
+  cursor: pointer;
+}
+
+/* États de chargement et d'erreur */
+.parties-loading,
+.parties-error,
+.parties-empty {
+  text-align: center;
+  margin: 40px auto;
+  padding: 20px;
+  max-width: 600px;
+  font-size: 1.1rem;
+  color: #e9d6a0;
+}
+
+.parties-error {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 12px;
+}
+
+.parties-empty {
+  color: #a8946c;
+  font-style: italic;
+}
+
+/* Liste des groupes */
+.parties-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 22px;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(12, 8, 6, 0.55), rgba(18, 13, 10, 0.6)),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.008) 0 3px,
+      transparent 3px 12px
+    );
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.8),
+    inset 0 -10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .parties-page h1 {
+    font-size: 1.9rem;
+  }
+  .parties-list {
+    gap: 18px;
+    padding: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .parties-page h1 {
+    font-size: 1.6rem;
+  }
+  .parties-list {
+    padding: 12px;
+    gap: 12px;
+  }
+  .parties-filter {
+    padding: 0 12px;
+  }
+  .parties-filter label {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+}

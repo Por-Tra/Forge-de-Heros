@@ -5,7 +5,12 @@
 .characters-page {
   /* Thème générale — ambiance donjon & parchemin */
   min-height: 100vh;
-  background: radial-gradient(circle at 10% 10%, #0f0b08 0%, #0b0a0a 25%, #0a0a0a 100%);
+  background: radial-gradient(
+    circle at 10% 10%,
+    #0f0b08 0%,
+    #0b0a0a 25%,
+    #0a0a0a 100%
+  );
   color: #e9d6a0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -15,7 +20,8 @@
 }
 
 /* neutralise la marge par défaut du navigateur et évite le bord blanc */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   /* optionnel : assure que le fond autour reste sombre quand cette feuille est chargée */
@@ -31,190 +37,272 @@ html, body {
 
 /* Make the title centered horizontally and not forced to occupy a fixed slot */
 .characters-page h1 {
-    display: block;
-    width: 100%;
-    max-width: 900px;
-    margin: 12px auto 6px auto;
-    text-align: center;
-    box-sizing: border-box;
-    font-family: 'Cinzel', serif;
-    font-size: 2.1rem;
-    color: #f0d99b;
-    letter-spacing: 1px;
-    text-shadow: 0 6px 18px rgba(0,0,0,0.75), 0 1px 0 rgba(255,255,255,0.03);
-    position: relative;
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  margin: 12px auto 6px auto;
+  text-align: center;
+  box-sizing: border-box;
+  font-family: 'Cinzel', serif;
+  font-size: 2.1rem;
+  color: #f0d99b;
+  letter-spacing: 1px;
+  text-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.75),
+    0 1px 0 rgba(255, 255, 255, 0.03);
+  position: relative;
 }
 .characters-page h1::before {
-    content: "⚔";
-    margin-right: 10px;
-    color: #caa54a;
-    font-size: 1.05rem;
-    vertical-align: middle;
+  content: '⚔';
+  margin-right: 10px;
+  color: #caa54a;
+  font-size: 1.05rem;
+  vertical-align: middle;
 }
 
 /* Recherche : sous le titre, centrée et pas trop large */
-.characters-page h1 + input[type="text"],
-.characters-page input[type="text"] {
-    display: block;
-    margin: 10px auto 18px auto;
-    width: min(460px, 86%);
-    max-width: 460px;
-    min-width: 280px;
-    background: linear-gradient(180deg, rgba(12,10,8,0.65), rgba(6,6,6,0.6));
-    border: 1px solid rgba(183,134,45,0.14);
-    color: #f6e9c4;
-    padding: 10px 14px 10px 38px;
-    border-radius: 12px;
-    box-shadow: 0 8px 26px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
-    transition: box-shadow 160ms ease, transform 120ms ease;
-    caret-color: #f0d99b;
-    outline: none;
-    background-image:
-      radial-gradient(circle at 12px 50%, rgba(255,255,255,0.06) 0 1px, transparent 2px),
-      linear-gradient(180deg, rgba(12,10,8,0.65), rgba(6,6,6,0.6));
-    background-repeat: no-repeat;
-    background-position: 12px 50%;
+.characters-page h1 + input[type='text'],
+.characters-page input[type='text'] {
+  display: block;
+  margin: 10px auto 18px auto;
+  width: min(460px, 86%);
+  max-width: 460px;
+  min-width: 280px;
+  background: linear-gradient(
+    180deg,
+    rgba(12, 10, 8, 0.65),
+    rgba(6, 6, 6, 0.6)
+  );
+  border: 1px solid rgba(183, 134, 45, 0.14);
+  color: #f6e9c4;
+  padding: 10px 14px 10px 38px;
+  border-radius: 12px;
+  box-shadow:
+    0 8px 26px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  transition:
+    box-shadow 160ms ease,
+    transform 120ms ease;
+  caret-color: #f0d99b;
+  outline: none;
+  background-image:
+    radial-gradient(
+      circle at 12px 50%,
+      rgba(255, 255, 255, 0.06) 0 1px,
+      transparent 2px
+    ),
+    linear-gradient(180deg, rgba(12, 10, 8, 0.65), rgba(6, 6, 6, 0.6));
+  background-repeat: no-repeat;
+  background-position: 12px 50%;
 }
-.characters-page h1 + input[type="text"]:focus,
-.characters-page input[type="text"]:focus {
-    box-shadow: 0 18px 44px rgba(172,112,20,0.08), inset 0 1px 0 rgba(255,255,255,0.03);
-    transform: translateY(-2px);
+.characters-page h1 + input[type='text']:focus,
+.characters-page input[type='text']:focus {
+  box-shadow:
+    0 18px 44px rgba(172, 112, 20, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transform: translateY(-2px);
 }
-.characters-page h1 + input[type="text"]::placeholder,
-.characters-page input[type="text"]::placeholder {
-    color: rgba(246,233,196,0.55);
+.characters-page h1 + input[type='text']::placeholder,
+.characters-page input[type='text']::placeholder {
+  color: rgba(246, 233, 196, 0.55);
 }
 
 /* Push the fieldset slightly since search is now in flow */
-.characters-page fieldset { margin-top: 8px; }
+.characters-page fieldset {
+  margin-top: 8px;
+}
 
 /* Conteneur central pour harmoniser la page */
 .characters-page fieldset + div,
 .characters-page fieldset + div > .character-card,
 .characters-page fieldset {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /* Centrage général / conteneur */
 .characters-page fieldset,
 .characters-page fieldset + div {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1200px;
 }
 
 /* Fieldset de tri */
 .characters-page fieldset {
-    max-width: 840px;
-    border-radius: 12px;
-    padding: 12px 14px;
-    border: 1px solid rgba(255,255,255,0.03);
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
-    box-shadow: 0 6px 18px rgba(0,0,0,0.6), inset 0 -6px 18px rgba(255,255,255,0.02);
-    margin-bottom: 18px;
+  max-width: 840px;
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.04)
+  );
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.6),
+    inset 0 -6px 18px rgba(255, 255, 255, 0.02);
+  margin-bottom: 18px;
 }
 .characters-page legend {
-    color: #e8d6a1;
-    font-weight: 700;
-    font-family: 'Cinzel', serif;
-    padding: 0 6px;
+  color: #e8d6a1;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
+  padding: 0 6px;
 }
 
 /* Radios & labels */
 .characters-page fieldset div {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
 }
-.characters-page fieldset input[type="radio"] {
-    width: 18px;
-    height: 18px;
-    accent-color: #b7862d;
+.characters-page fieldset input[type='radio'] {
+  width: 18px;
+  height: 18px;
+  accent-color: #b7862d;
 }
 .characters-page fieldset label {
-    color: #e9d6a0;
-    font-size: 0.95rem;
+  color: #e9d6a0;
+  font-size: 0.95rem;
 }
 
 /* Conteneur des cartes */
 .characters-page fieldset + div {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 24px;
-    align-items: start;
-    justify-items: center;
-    padding: 22px;
-    border-radius: 14px;
-    background:
-        linear-gradient(180deg, rgba(12,8,6,0.55), rgba(18,13,10,0.6)),
-        repeating-linear-gradient(45deg, rgba(255,255,255,0.008) 0 3px, transparent 3px 12px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.8), inset 0 -10px 30px rgba(0,0,0,0.5);
-    border: 1px solid rgba(255,255,255,0.03);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  align-items: start;
+  justify-items: center;
+  padding: 22px;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(12, 8, 6, 0.55), rgba(18, 13, 10, 0.6)),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.008) 0 3px,
+      transparent 3px 12px
+    );
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.8),
+    inset 0 -10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 /* Forcer les character-card (ne touche pas au fichier Character.Card.scss) */
 .characters-page fieldset + div .character-card {
-    width: 100% !important;
-    max-width: 360px;
-    margin: 0;
-    transition: transform 180ms ease, box-shadow 180ms ease;
-    z-index: 2;
-    box-sizing: border-box;
-    padding-top: 20px;
+  width: 100% !important;
+  max-width: 360px;
+  margin: 0;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+  z-index: 2;
+  box-sizing: border-box;
+  padding-top: 20px;
 }
 
 /* Ajustement des pseudo-ornements pour éviter chevauchement */
 .characters-page fieldset + div .character-card::before,
 .characters-page fieldset + div .character-card::after {
-    width: 48px;
-    height: 48px;
-    opacity: 0.75;
-    transform: rotate(18deg);
-    border-width: 1.5px;
+  width: 48px;
+  height: 48px;
+  opacity: 0.75;
+  transform: rotate(18deg);
+  border-width: 1.5px;
 }
-.characters-page fieldset + div .character-card::before { top: -12px; left: -12px; transform: rotate(20deg); }
-.characters-page fieldset + div .character-card::after  { bottom: -12px; right: -12px; transform: rotate(-18deg); }
+.characters-page fieldset + div .character-card::before {
+  top: -12px;
+  left: -12px;
+  transform: rotate(20deg);
+}
+.characters-page fieldset + div .character-card::after {
+  bottom: -12px;
+  right: -12px;
+  transform: rotate(-18deg);
+}
 
 .characters-page fieldset + div .character-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 22px 50px rgba(0,0,0,0.68), inset 0 -6px 18px rgba(0,0,0,0.18);
+  transform: translateY(-8px);
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.68),
+    inset 0 -6px 18px rgba(0, 0, 0, 0.18);
 }
 .characters-page fieldset + div .character-card__avatar {
-    display: block;
-    min-width: 64px;
-    min-height: 64px;
-    object-fit: cover;
+  display: block;
+  min-width: 64px;
+  min-height: 64px;
+  object-fit: cover;
 }
 
 /* Responsive */
 @media (max-width: 900px) {
-    .characters-page h1 { font-size: 1.9rem; }
-    .characters-page input[type="text"] { max-width: 100%; }
-    .characters-page fieldset + div {
-        gap: 18px;
-        padding: 16px;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    }
-    .characters-page fieldset + div .character-card { max-width: 100%; }
-    .characters-page fieldset + div .character-card::before,
-    .characters-page fieldset + div .character-card::after {
-        width: 40px;
-        height: 40px;
-        opacity: 0.6;
-    }
+  .characters-page h1 {
+    font-size: 1.9rem;
+  }
+  .characters-page input[type='text'] {
+    max-width: 100%;
+  }
+  .characters-page fieldset + div {
+    gap: 18px;
+    padding: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .characters-page fieldset + div .character-card {
+    max-width: 100%;
+  }
+  .characters-page fieldset + div .character-card::before,
+  .characters-page fieldset + div .character-card::after {
+    width: 40px;
+    height: 40px;
+    opacity: 0.6;
+  }
 }
 @media (max-width: 520px) {
-    .characters-page h1 { font-size: 1.6rem; }
-    .characters-page fieldset + div { padding: 12px; gap: 12px; }
-    .characters-page fieldset + div .character-card::before,
-    .characters-page fieldset + div .character-card::after {
-        width: 34px; height: 34px; opacity: 0.55;
-        top: -8px; left: -8px; bottom: -8px; right: -8px;
-    }
+  .characters-page h1 {
+    font-size: 1.6rem;
+  }
+  .characters-page fieldset + div {
+    padding: 12px;
+    gap: 12px;
+  }
+  .characters-page fieldset + div .character-card::before,
+  .characters-page fieldset + div .character-card::after {
+    width: 34px;
+    height: 34px;
+    opacity: 0.55;
+    top: -8px;
+    left: -8px;
+    bottom: -8px;
+    right: -8px;
+  }
 }
 
 /* petite touche: un halo discret derrière chaque carte (faible opacité) */
 fieldset + div .character-card::marker {
-    /* fallback, n'utilise pas ::marker réellement — réservé pour compatibilité */
+  /* fallback, n'utilise pas ::marker réellement — réservé pour compatibilité */
+}
+
+/* États de chargement et d'erreur */
+.characters-loading,
+.characters-error,
+.characters-empty {
+  text-align: center;
+  margin: 40px auto;
+  padding: 20px;
+  max-width: 600px;
+  font-size: 1.1rem;
+  color: #e9d6a0;
+}
+
+.characters-error {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 12px;
+}
+
+.characters-empty {
+  color: #a8946c;
+  font-style: italic;
 }
