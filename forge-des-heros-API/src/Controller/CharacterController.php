@@ -31,15 +31,26 @@ final class CharacterController extends AbstractController
         $raceId  = $request->query->get('race');
 
         // Récupère seulement les personnages de l'utilisateur connecté
-        $characters = $characterRepository->findByUser(
+        $userCharacters = $characterRepository->findByUser(
             $this->getUser(),
             is_string($search) ? $search : null,
             is_string($classId) && $classId ? (int)$classId : null,
             is_string($raceId) && $raceId ? (int)$raceId : null
         );
 
+        // Récupère TOUS les personnages (avec filtres appliqués)
+        $allCharacters = $characterRepository->findWithFilters(
+            is_string($search) ? $search : null,
+            is_string($classId) && $classId ? $classId : null,
+            is_string($raceId) && $raceId ? $raceId : null
+        );
+
         return $this->render('character/index.html.twig', [
-            'characters' => $characters, 'classes'=> $characterClassRepository->findAll(), 'races'=> $raceRepository->findAll()]);
+            'userCharacters' => $userCharacters,
+            'allCharacters' => $allCharacters,
+            'classes'=> $characterClassRepository->findAll(), 
+            'races'=> $raceRepository->findAll()
+        ]);
     }
 
     // Ajouter un nouveaux personnage
@@ -61,6 +72,9 @@ final class CharacterController extends AbstractController
 
             // TODO : Calculer les PV automatiquement ICI
             //! PV = maximum du dé de vie + modificateur de Constitution
+            $constitutionModifier = (int) floor(($character->getConstitution() - 10) / 2);
+            $healthDice = $character->getCharacterClass()?->getHealthDice() ?? 6;
+            $character->setHealthPoints($healthDice + $constitutionModifier);
 
             /** @var UploadedFile|null $avatarFile */
             $avatarFile = $form->get('image')->getData();
@@ -97,6 +111,11 @@ final class CharacterController extends AbstractController
             }
 
             $entityManager->persist($character);
+
+            // Recalcul des HP si les stats ont changé
+            $constitutionModifier = (int) floor(($character->getConstitution() - 10) / 2);
+            $healthDice = $character->getCharacterClass()?->getHealthDice() ?? 6;
+            $character->setHealthPoints($healthDice + $constitutionModifier);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_character_index', [], Response::HTTP_SEE_OTHER);
@@ -108,14 +127,7 @@ final class CharacterController extends AbstractController
     #[Route('/{id}', name: 'app_character_show', methods: ['GET'])]
     public function show(Character $character): Response
     {
-        // Vérifier que l'utilisateur est le propriétaire du personnage
-        if ($character->getUser() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Vous ne pouvez voir que vos propres personnages.');
-        }
-
-        return $this->render('character/show.html.twig', [
-            'character' => $character,
-        ]);
+        return $this->render('character/show.html.twig', ['character' => $character]);
     }
 
     #[Route('/{id}/edit', name: 'app_character_edit', methods: ['GET', 'POST'])]
