@@ -11,14 +11,30 @@ function CharacterDetail() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const normalizeCharacter = (src) => {
+      const item = src?.data ?? src ?? {};
+      return {
+        ...item,
+        characterClass: item.characterClass ?? item.class ?? null,
+        strength: item.stats?.strength ?? item.strength ?? 0,
+        dexterity: item.stats?.dexterity ?? item.dexterity ?? 0,
+        constitution: item.stats?.constitution ?? item.constitution ?? 0,
+        intelligence: item.stats?.intelligence ?? item.intelligence ?? 0,
+        wisdom: item.stats?.wisdom ?? item.wisdom ?? 0,
+        charisma: item.stats?.charisma ?? item.charisma ?? 0,
+        skills: item.skills ?? [],
+        parties: item.parties ?? [],
+      };
+    };
+
     const fetchCharacter = async () => {
       try {
         setLoading(true);
         setError(null);
         const data = await getCharacter(id);
-        setCharacter(data);
+        setCharacter(normalizeCharacter(data));
       } catch (err) {
-        setError(err.message);
+        setError(err.message ?? String(err));
       } finally {
         setLoading(false);
       }

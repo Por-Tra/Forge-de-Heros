@@ -1,10 +1,56 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Character.Card.scss';
 import { getCharacter } from '../utils/api';
 
 function CharacterCard({ characterID }) {
-  // Initiales pour avatar placeholder
-  const data = getCharacter(characterID);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const normalizeCharacter = (src) => {
+      const item = src?.data ?? src ?? {};
+      return {
+        ...item,
+        characterClass: item.characterClass ?? item.class ?? null,
+        strength: item.stats?.strength ?? item.strength ?? 0,
+        dexterity: item.stats?.dexterity ?? item.dexterity ?? 0,
+        constitution: item.stats?.constitution ?? item.constitution ?? 0,
+        intelligence: item.stats?.intelligence ?? item.intelligence ?? 0,
+        wisdom: item.stats?.wisdom ?? item.wisdom ?? 0,
+        charisma: item.stats?.charisma ?? item.charisma ?? 0,
+        skills: item.skills ?? [],
+        parties: item.parties ?? [],
+      };
+    };
+
+    (async () => {
+      try {
+        const res = await getCharacter(characterID);
+        if (!mounted) return;
+        setData(normalizeCharacter(res));
+      } catch (err) {
+        if (mounted) {
+          setData({
+            id: characterID,
+            name: 'Inconnu',
+            characterClass: null,
+            race: null,
+            level: '?',
+            image: null,
+          });
+
+          return (<p>Erreur: {err.message}</p>)
+        }
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, [characterID]);
+
   const getInitials = (name = '') =>
     name
       .split(' ')
@@ -13,6 +59,19 @@ function CharacterCard({ characterID }) {
       .slice(0, 2)
       .join('')
       .toUpperCase();
+
+  if (!data) {
+    return (
+      <div className="character-card character-card--loading">
+        <div className="character-card__header">
+          <div className="character-card__avatar character-card__avatar--placeholder" />
+          <div>
+            <div className="character-card__name">Chargement...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="character-card">
@@ -52,10 +111,7 @@ function CharacterCard({ characterID }) {
           </div>
         </div>
 
-        <Link
-          className="character-card__link"
-          to={`/characters/${characterID}`}
-        >
+        <Link className="character-card__link" to={`/characters/${characterID}`}>
           Plus d'informations
         </Link>
       </div>
