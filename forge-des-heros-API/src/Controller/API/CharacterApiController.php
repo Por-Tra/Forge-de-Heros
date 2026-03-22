@@ -67,6 +67,23 @@ final class CharacterApiController extends AbstractController
             'image'        => $c->getImage(),
             'class'        => self::normalizeClass($c->getCharacterClass()),
             'race'         => self::normalizeRace($c->getRace()),
+            // Ajout pour le front
+            'stats' => [
+                'strength'     => $c->getStrength(),
+                'dexterity'    => $c->getDexterity(),
+                'constitution' => $c->getConstitution(),
+                'intelligence' => $c->getIntelligence(),
+                'wisdom'       => $c->getWisdom(),
+                'charisma'     => $c->getCharisma(),
+            ],
+            'skills' => $c->getCharacterClass()
+                ? array_map(fn($s) => [
+                    'id'      => $s->getId(),
+                    'name'    => $s->getName(),
+                    'ability' => $s->getAbility(),
+                ], $c->getCharacterClass()->getSkills()->toArray())
+                : [],
+            'parties' => self::normalizeParties($c->getParties()),
         ], $characters);
 
         return $this->json([
