@@ -175,6 +175,10 @@ final class PartyController extends AbstractController
     #[Route('/{id}/edit', name: 'app_party_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Party $party, EntityManagerInterface $entityManager): Response
     {
+        if ($party->getCreator() !== $this->getUser()) {
+            return $this->redirectToRoute('app_access_denied');
+        }
+
         $form = $this->createForm(PartyType::class, $party);
         $form->handleRequest($request);
 
@@ -193,6 +197,10 @@ final class PartyController extends AbstractController
     #[Route('/{id}', name: 'app_party_delete', methods: ['POST'])]
     public function delete(Request $request, Party $party, EntityManagerInterface $entityManager): Response
     {
+        if ($party->getCreator() !== $this->getUser()) {
+            return $this->redirectToRoute('app_access_denied');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$party->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($party);
             $entityManager->flush();
