@@ -2,10 +2,23 @@ import { Link } from 'react-router-dom';
 import '../styles/PartyCard.scss';
 
 function PartyCard({ partyID, data }) {
-  const currentMembers = data.members?.length || 0;
-  const maxSize = data.maxSize || 0;
-  const remainingSpots = maxSize - currentMembers;
-  const isFull = remainingSpots <= 0;
+  if (!data) {
+    return (
+      <div className="party-card party-card--loading">
+        <div className="party-card__header">
+          <div className="party-card__icon" aria-hidden="true">⚔</div>
+          <div>
+            <div className="party-card__name">Chargement...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const currentMembers = data.currentSize ?? data.members?.length ?? 0;
+  const maxSize = data.maxSize ?? data.size ?? 0;
+  const remainingSpots = Math.max(0, maxSize - currentMembers);
+  const isFull = data.isFull ?? remainingSpots <= 0;
 
   return (
     <div className={`party-card ${isFull ? 'party-card--full' : ''}`}>
