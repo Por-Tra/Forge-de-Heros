@@ -11,7 +11,7 @@
     
     {# ========== MES PERSONNAGES ========== #}
     <section class="section-user-characters">
-        <h2>Mes personnages</h2>
+        <h2>My characters</h2>
 
         {% if userCharacters|length > 0 %}
             <table class="table">
@@ -71,7 +71,7 @@
         {% endif %}
 
         <div style="margin: 20px 0;">
-            <a href="{{ path('app_character_new') }}" class="btn btn-primary">Créer un nouveau personnage</a>
+            <a href="{{ path('app_character_new') }}" class="btn btn-primary">Create a new character</a>
         </div>
     </section>
 
@@ -79,7 +79,7 @@
 
     {# ========== TOUS LES PERSONNAGES ========== #}
     <section class="section-all-characters">
-        <h2>Tous les personnages</h2>
+        <h2>All characters</h2>
 
         {% if allCharacters|length > 0 %}
             <table class="table">
@@ -87,7 +87,7 @@
                     <tr>
                         <th>Id</th>
                         <th>Name</th>
-                        <th>Créateur</th>
+                        <th>Creator</th>
                         <th>Level</th>
                         <th>Strength</th>
                         <th>Dexterity</th>

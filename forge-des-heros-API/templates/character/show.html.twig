@@ -76,9 +76,11 @@
 
 
     {# Buttons #}
-    <a href="{{ path('app_character_edit', {'id': character.id}) }}">edit</a>
-
-    {{ include('character/_delete_form.html.twig') }}
+    {% if app.user and character.user and character.user is same as(app.user) %}
+        <a href="{{ path('app_character_edit', {'id': character.id}) }}">edit</a>
+        {{ include('character/_delete_form.html.twig') }}
+    {% endif %}
+    
 
     <a href="{{ path('app_character_index') }}">back to list</a>
 

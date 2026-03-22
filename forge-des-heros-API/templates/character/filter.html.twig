@@ -4,7 +4,7 @@
     <input type="hidden" name="search" value="{{ app.request.query.get('search') }}">
 
     <select name="class">
-        <option value="">Toutes les classes</option>
+        <option value="">All classes</option>
         {% for class in classes %}
             <option value="{{ class.id }}" {% if app.request.query.get('class') == class.id %}selected{% endif %}>
                 {{ class.name }}
@@ -13,7 +13,7 @@
     </select>
 
     <select name="race">
-        <option value="">Toutes les races</option>
+        <option value="">All races</option>
         {% for race in races %}
             <option value="{{ race.id }}" {% if app.request.query.get('race') == race.id %}selected{% endif %}>
                 {{ race.name }}
@@ -21,6 +21,6 @@
         {% endfor %}
     </select>
 
-    <button type="submit">Filtrer</button>
-    <a href="{{ path('app_character_index') }}">Réinitialiser</a>
+    <button type="submit">Filter</button>
+    <a href="{{ path('app_character_index') }}">Reset</a>
 </form>

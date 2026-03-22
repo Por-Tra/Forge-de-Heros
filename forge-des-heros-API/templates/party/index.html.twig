@@ -8,21 +8,21 @@
     <p>
         Filtrer :
         {% if status == 'all' %}
-            <strong>Tous</strong>
+            <strong>All</strong>
         {% else %}
-            <a href="{{ path('app_party_index', {'status': 'all'}) }}">Tous</a>
+            <a href="{{ path('app_party_index', {'status': 'all'}) }}">All</a>
         {% endif %}
         |
         {% if status == 'available' %}
-            <strong>Avec places disponibles</strong>
+            <strong>With places available</strong>
         {% else %}
-            <a href="{{ path('app_party_index', {'status': 'available'}) }}">Avec places disponibles</a>
+            <a href="{{ path('app_party_index', {'status': 'available'}) }}">With places available</a>
         {% endif %}
         |
         {% if status == 'full' %}
-            <strong>Complets</strong>
+            <strong>Complete</strong>
         {% else %}
-            <a href="{{ path('app_party_index', {'status': 'full'}) }}">Complets</a>
+            <a href="{{ path('app_party_index', {'status': 'full'}) }}">Complete</a>
         {% endif %}
     </p>
 
