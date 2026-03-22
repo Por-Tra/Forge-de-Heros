@@ -9,14 +9,14 @@
     {% include 'character/search.html.twig' %}
     {% include 'character/filter.html.twig' %}
     
-    <h1>Character index</h1>
+    <h1>Mes personnages</h1>
 
-    
     
 
     <table class="table">
         <thead>
             <tr>
+                <th>Id</th>
                 <th>Name</th>
                 <th>Level</th>
                 <th>Strength</th>
@@ -35,6 +35,7 @@
         <tbody>
         {% for character in characters %}
             <tr>
+                <td>{{ character.id }}</td>
                 <td>{{ character.name }}</td>
                 <td>{{ character.level }}</td>
                 <td>{{ character.strength }}</td>
@@ -62,11 +63,13 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="12">no records found</td>
+                <td colspan="14">
+                    <p style="text-align: center; padding: 20px;">Vous n'avez pas encore créé de personnage. <a href="{{ path('app_character_new') }}">Créer un nouveau personage</a></p>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_character_new') }}">Create new</a>
+    <a href="{{ path('app_character_new') }}">Créer un nouveau personnage</a>
 {% endblock %}

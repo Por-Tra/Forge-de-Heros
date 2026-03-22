@@ -78,6 +78,38 @@ class CharacterRepository extends ServiceEntityRepository
         return $qb->orderBy('c.name', 'ASC')->getQuery()->getResult();
     }
 
+    /**
+     * Récupère tous les personnages de l'utilisateur avec filtres optionnels
+     * @return Character[]
+     */
+    public function findByUser($user, ?string $search = null, ?int $classId = null, ?int $raceId = null): array
+    {
+        if (!$user) {
+            return [];
+        }
 
+        $qb = $this->createQueryBuilder('c')
+            ->leftJoin('c.characterClass', 'cc')
+            ->leftJoin('c.race', 'r')
+            ->where('c.user = :user')
+            ->setParameter('user', $user);
+
+        if ($search) {
+            $qb->andWhere('c.name LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($classId) {
+            $qb->andWhere('cc.id = :classId')
+                ->setParameter('classId', $classId);
+        }
+
+        if ($raceId) {
+            $qb->andWhere('r.id = :raceId')
+                ->setParameter('raceId', $raceId);
+        }
+
+        return $qb->orderBy('c.name', 'ASC')->getQuery()->getResult();
+    }
 
 }

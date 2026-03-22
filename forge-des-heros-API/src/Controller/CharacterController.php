@@ -30,8 +30,13 @@ final class CharacterController extends AbstractController
         $classId = $request->query->get('class');
         $raceId  = $request->query->get('race');
 
-        // Filter les perso en fonction des paramètre -> voir CharacterRepository.findWithFilters()
-        $characters = $characterRepository->findWithFilters($search, $classId, $raceId);
+        // Récupère seulement les personnages de l'utilisateur connecté
+        $characters = $characterRepository->findByUser(
+            $this->getUser(),
+            is_string($search) ? $search : null,
+            is_string($classId) && $classId ? (int)$classId : null,
+            is_string($raceId) && $raceId ? (int)$raceId : null
+        );
 
         return $this->render('character/index.html.twig', [
             'characters' => $characters, 'classes'=> $characterClassRepository->findAll(), 'races'=> $raceRepository->findAll()]);
@@ -103,6 +108,11 @@ final class CharacterController extends AbstractController
     #[Route('/{id}', name: 'app_character_show', methods: ['GET'])]
     public function show(Character $character): Response
     {
+        // Vérifier que l'utilisateur est le propriétaire du personnage
+        if ($character->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez voir que vos propres personnages.');
+        }
+
         return $this->render('character/show.html.twig', [
             'character' => $character,
         ]);
@@ -117,6 +127,11 @@ final class CharacterController extends AbstractController
         #[Autowire('%avatars_directory%')] string $avatarsDirectory,
     ): Response
     {
+        // Vérifier que l'utilisateur est le propriétaire du personnage
+        if ($character->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez éditer que vos propres personnages.');
+        }
+
         $form = $this->createForm(CharacterType::class, $character);
         $form->handleRequest($request);
 
@@ -177,6 +192,11 @@ final class CharacterController extends AbstractController
         #[Autowire('%avatars_directory%')] string $avatarsDirectory,
     ): Response
     {
+        // Vérifier que l'utilisateur est le propriétaire du personnage
+        if ($character->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez supprimer que vos propres personnages.');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$character->getId(), $request->getPayload()->getString('_token'))) {
             $avatar = $character->getImage();
             if ($avatar) {
@@ -207,6 +227,20 @@ final class CharacterController extends AbstractController
         return $this->render('character/search.html.twig', [
             'characters' => $characters,
             'query' => $query,
+        ]);
+    }
+
+    public function showUserCharacters(CharacterRepository $characterRepository): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException('You must be logged in to view your characters.');
+        }
+
+        $characters = $characterRepository->findBy(['user' => $user], ['name' => 'ASC']);
+
+        return $this->render('character/user_characters.html.twig', [
+            'characters' => $characters,
         ]);
     }
 
