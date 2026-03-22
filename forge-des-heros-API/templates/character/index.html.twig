@@ -17,7 +17,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th>Level</th>
                 <th>Strength</th>
@@ -26,7 +25,7 @@
                 <th>Intelligence</th>
                 <th>Wisdom</th>
                 <th>Charisma</th>
-                <th>Class</th
+                <th>Class</th>
                 <th>Race</th>
                 <th>HealthPoints</th>
                 <th>Image</th>
@@ -36,7 +35,6 @@
         <tbody>
         {% for character in characters %}
             <tr>
-                <td>{{ character.id }}</td>
                 <td>{{ character.name }}</td>
                 <td>{{ character.level }}</td>
                 <td>{{ character.strength }}</td>
@@ -50,7 +48,7 @@
                 <td>{{ character.healthPoints }}</td>
                 <td>
                     {% if character.image %}
-                        <img src="{{ asset('uploads/avatars/' ~ character.image) }}" alt="Avatar de {{ character.name }}" width="64" height="64" style="object-fit: cover; border-radius: 8px;" />
+                        <img src="{{ asset('uploads/avatars/' ~ character.image) }}" alt="Avatar de {{ character.name }}" width="64" height="64" style="object-fit: cover;" />
                     {% else %}
                         <span>Aucun avatar</span>
                     {% endif %}
