@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import '../styles/Character.Card.scss';
+import { getCharacter } from '../utils/api';
 
-function CharacterCard({ characterID, data }) {
+function CharacterCard({ characterID }) {
   // Initiales pour avatar placeholder
+  const data = getCharacter(characterID);
   const getInitials = (name = '') =>
     name
       .split(' ')

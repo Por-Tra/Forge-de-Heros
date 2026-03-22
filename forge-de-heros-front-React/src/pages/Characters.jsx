@@ -128,7 +128,6 @@ function Characters() {
               <CharacterCard
                 key={character.id}
                 characterID={character.id}
-                data={character}
               />
             ))}
           </div>
