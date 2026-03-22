@@ -17,9 +17,11 @@ function Parties() {
         setLoading(true);
         setError(null);
         const data = await getParties();
-        setParties(data);
+        // normaliser la réponse : accepter Array ou { data: [...] }
+        const list = Array.isArray(data) ? data : data?.data ?? data?.hydra?.member ?? [];
+        setParties(list);
       } catch (err) {
-        setError(err.message);
+        setError(err.message ?? String(err));
       } finally {
         setLoading(false);
       }
@@ -32,9 +34,9 @@ function Parties() {
   const partiesFiltered = parties.filter((party) => {
     if (!showAvailableOnly) return true;
 
-    // Vérifier s'il reste des places
-    const currentMembers = party.members?.length || 0;
-    const maxSize = party.maxSize || 0;
+    // Utiliser currentSize si présent, sinon fallback sur members.length
+    const currentMembers = party.currentSize ?? party.members?.length ?? 0;
+    const maxSize = party.maxSize ?? party.size ?? 0;
     return currentMembers < maxSize;
   });
 
