@@ -1,0 +1,64 @@
+{# Composant pour afficher la liste des personnages de l'utilisateur #}
+
+<section class="user-characters-section">
+    <h2>Mes personnages</h2>
+
+    {% if characters|length > 0 %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Level</th>
+                    <th>Strength</th>
+                    <th>Dexterity</th>
+                    <th>Constitution</th>
+                    <th>Intelligence</th>
+                    <th>Wisdom</th>
+                    <th>Charisma</th>
+                    <th>Class</th>
+                    <th>Race</th>
+                    <th>HealthPoints</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for character in characters %}
+                <tr>
+                    <td>{{ character.id }}</td>
+                    <td>{{ character.name }}</td>
+                    <td>{{ character.level }}</td>
+                    <td>{{ character.strength }}</td>
+                    <td>{{ character.dexterity }}</td>
+                    <td>{{ character.constitution }}</td>
+                    <td>{{ character.intelligence }}</td>
+                    <td>{{ character.wisdom }}</td>
+                    <td>{{ character.charisma }}</td>
+                    <td>{{ character.characterClass.name }}</td>
+                    <td>{{ character.race.name }}</td>
+                    <td>{{ character.healthPoints }}</td>
+                    <td>
+                        {% if character.image %}
+                            <img src="{{ asset('uploads/avatars/' ~ character.image) }}" alt="Avatar de {{ character.name }}" width="64" height="64" style="object-fit: cover; border-radius: 8px;" />
+                        {% else %}
+                            <span>Aucun avatar</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('app_character_show', {'id': character.id}) }}">Show</a>
+                        <a href="{{ path('app_character_edit', {'id': character.id}) }}">Edit</a>
+                        {{ include('character/_delete_form.html.twig') }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-characters">Vous n'avez pas encore créé de personnage. <a href="{{ path('app_character_new') }}">Créer un nouveau personnage</a></p>
+    {% endif %}
+
+    <div class="character-actions">
+        <a href="{{ path('app_character_new') }}" class="btn btn-primary">Créer un nouveau personnage</a>
+    </div>
+</section>

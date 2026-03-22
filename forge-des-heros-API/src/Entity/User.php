@@ -41,12 +41,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     /**
+     * Liste des personnages créés par l'utilisateur
      * @var Collection<int, Character>
      */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Character::class)]
     private Collection $characters;
 
     /**
+     * Liste des parties créées par l'utilisateur
      * @var Collection<int, Party>
      */
     #[ORM\OneToMany(mappedBy: 'creator', targetEntity: Party::class)]

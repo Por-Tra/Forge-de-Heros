@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap');
+
+.header {
+  background: radial-gradient(
+    circle at 10% 10%,
+    #0f0b08 0%,
+    #0b0a0a 25%,
+    #0a0a0a 100%
+  );
+}
+
+.header__title {
+  text-align: center;
+  padding: 24px 16px 12px 16px;
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: 2.5rem;
+  color: #f0d99b;
+  letter-spacing: 2px;
+  text-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.85),
+    0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.header__title::before {
+  content: '🗡';
+  margin-right: 12px;
+  font-size: 2rem;
+}
+
+.header__title::after {
+  content: '🛡';
+  margin-left: 12px;
+  font-size: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .header__title {
+    font-size: 1.8rem;
+    padding: 16px 12px 8px 12px;
+  }
+
+  .header__title::before,
+  .header__title::after {
+    font-size: 1.5rem;
+  }
+}

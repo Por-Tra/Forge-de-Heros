@@ -1,46 +1,64 @@
-//import { getCharacter } from "../utils/api";
-import { Link } from "react-router-dom"; // ajouté
-import "../styles/Character.Card.scss";
+import { Link } from 'react-router-dom';
+import '../styles/Character.Card.scss';
 
-function CharacterCard({ characterID, data })
-{
-    // const data = getCharacter(characterID);
+function CharacterCard({ characterID, data }) {
+  // Initiales pour avatar placeholder
+  const getInitials = (name = '') =>
+    name
+      .split(' ')
+      .filter(Boolean)
+      .map((n) => n[0])
+      .slice(0, 2)
+      .join('')
+      .toUpperCase();
 
-    /* 
-      Informations a afficher:
-        - Avatar
-        - Nom
-        - Classe
-        - Race
-        - Niveau 
-     */
-
-    
-    //! On utilise data en props pour les tests seulement
-
-    return (
-        <div className="character-card">
-            <div className="character-card__header">
-                <img className="character-card__avatar" src={data.avatar} alt={`Avatar de ${data.name} (#${characterID})`} />
-                <div>
-                    <div className="character-card__name">{data.name}</div>
-                    <div className="character-card__rune" aria-hidden="true"></div>
-                </div>
-            </div>
-
-            <div className="character-card__body">
-                <div className="character-card__stats">
-                    <div className="character-card__stat"><span>Classe</span><span className="value">{data.class}</span></div>
-                    <div className="character-card__stat"><span>Race</span><span className="value">{data.race}</span></div>
-                    <div className="character-card__stat"><span>Niveau</span><span className="value">{data.level}</span></div>
-                </div>
-
-                <Link className="character-card__link" to={`/characters/${characterID}`}>
-                    Plus d'informations
-                </Link>
-            </div>
+  return (
+    <div className="character-card">
+      <div className="character-card__header">
+        {data.image ? (
+          <img
+            className="character-card__avatar"
+            src={data.image}
+            alt={`Avatar de ${data.name}`}
+          />
+        ) : (
+          <div className="character-card__avatar character-card__avatar--placeholder">
+            {getInitials(data.name)}
+          </div>
+        )}
+        <div>
+          <div className="character-card__name">{data.name}</div>
+          <div className="character-card__rune" aria-hidden="true"></div>
         </div>
-    );
+      </div>
+
+      <div className="character-card__body">
+        <div className="character-card__stats">
+          <div className="character-card__stat">
+            <span>Classe</span>
+            <span className="value">
+              {data.characterClass?.name || 'Inconnue'}
+            </span>
+          </div>
+          <div className="character-card__stat">
+            <span>Race</span>
+            <span className="value">{data.race?.name || 'Inconnue'}</span>
+          </div>
+          <div className="character-card__stat">
+            <span>Niveau</span>
+            <span className="value">{data.level}</span>
+          </div>
+        </div>
+
+        <Link
+          className="character-card__link"
+          to={`/characters/${characterID}`}
+        >
+          Plus d'informations
+        </Link>
+      </div>
+    </div>
+  );
 }
 
 export default CharacterCard;

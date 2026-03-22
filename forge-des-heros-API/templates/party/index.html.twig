@@ -8,21 +8,21 @@
     <p>
         Filtrer :
         {% if status == 'all' %}
-            <strong>Tous</strong>
+            <strong>All</strong>
         {% else %}
-            <a href="{{ path('app_party_index', {'status': 'all'}) }}">Tous</a>
+            <a href="{{ path('app_party_index', {'status': 'all'}) }}">All</a>
         {% endif %}
         |
         {% if status == 'available' %}
-            <strong>Avec places disponibles</strong>
+            <strong>With places available</strong>
         {% else %}
-            <a href="{{ path('app_party_index', {'status': 'available'}) }}">Avec places disponibles</a>
+            <a href="{{ path('app_party_index', {'status': 'available'}) }}">With places available</a>
         {% endif %}
         |
         {% if status == 'full' %}
-            <strong>Complets</strong>
+            <strong>Complete</strong>
         {% else %}
-            <a href="{{ path('app_party_index', {'status': 'full'}) }}">Complets</a>
+            <a href="{{ path('app_party_index', {'status': 'full'}) }}">Complete</a>
         {% endif %}
     </p>
 
@@ -32,6 +32,7 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Description</th>
+                <th>Creator</th>
                 <th>MaxSize</th>
                 <th>Occupation</th>
                 <th>actions</th>
@@ -43,6 +44,7 @@
                 <td>{{ party.id }}</td>
                 <td>{{ party.name }}</td>
                 <td>{{ party.description }}</td>
+                <td>{{ party.creator ? party.creator.username : 'Inconnu' }}</td>
                 <td>{{ party.maxSize is null ? 'Non definie' : party.maxSize }}</td>
                 <td>
                     {{ party.characters|length }}
@@ -52,8 +54,14 @@
                 </td>
                 <td>
                     <a href="{{ path('app_party_show', {'id': party.id}) }}">show</a>
-                    <a href="{{ path('app_party_edit', {'id': party.id}) }}">edit</a>
-                    {{ include('party/_delete_form.html.twig') }}
+
+                    {# Vérifie qui est l'utilisateur #}
+                    {% if party.creator == app.user %}
+                        <a href="{{ path('app_party_edit', {'id': party.id}) }}">edit</a>
+                        {{ include('party/_delete_form.html.twig') }}
+                    {% endif %}
+                    
+                    
                 </td>
             </tr>
         {% else %}
