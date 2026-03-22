@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\CharacterClass;
+use App\Entity\Skill;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,6 +17,13 @@ class CharacterClassType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('healthDice')
+            ->add('skills', EntityType::class, [
+                'class'        => Skill::class,
+                'choice_label' => 'name',
+                'multiple'     => true,
+                'expanded'     => true,
+                'label'        => 'Compétences',
+            ])
         ;
     }
 
