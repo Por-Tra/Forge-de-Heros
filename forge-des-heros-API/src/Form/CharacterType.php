@@ -18,6 +18,15 @@ use App\Entity\Race;
 
 class CharacterType extends AbstractType
 {
+    /**
+     * Tableau des coûts pour le système point-buy (budget total de 27 points)
+     * Valeur -> Coût
+     * 8 -> 0, 9 -> 1, 10 -> 2, 11 -> 3, 12 -> 4, 13 -> 5, 14 -> 7, 15 -> 9
+     */
+    private const POINT_BUY_COSTS = [
+        8 => 0, 9 => 1, 10 => 2, 11 => 3, 12 => 4, 13 => 5, 14 => 7, 15 => 9,
+    ];
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder

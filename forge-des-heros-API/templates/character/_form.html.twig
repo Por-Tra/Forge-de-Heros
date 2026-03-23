@@ -1,3 +1,38 @@
+<!-- Point-Buy System Help -->
+<section style="margin: 20px 0; padding: 15px; border: 1px solid #ccc; background-color: #f9f9f9;">
+    <h3>System de Point-Buy (Característiques)</h3>
+    <p>Vous disposez d'un budget total de <strong>27 points</strong> à distribuer entre vos 6 caractéristiques (Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma).</p>
+    <p>Chaque caractéristique doit être entre <strong>8 et 15</strong>.</p>
+    
+    <h4>Table des coûts :</h4>
+    <table style="border-collapse: collapse; margin: 10px 0;">
+        <tr style="background-color: #e0e0e0;">
+            <th style="border: 1px solid #999; padding: 5px;">Valeur</th>
+            <th style="border: 1px solid #999; padding: 5px;">8</th>
+            <th style="border: 1px solid #999; padding: 5px;">9</th>
+            <th style="border: 1px solid #999; padding: 5px;">10</th>
+            <th style="border: 1px solid #999; padding: 5px;">11</th>
+            <th style="border: 1px solid #999; padding: 5px;">12</th>
+            <th style="border: 1px solid #999; padding: 5px;">13</th>
+            <th style="border: 1px solid #999; padding: 5px;">14</th>
+            <th style="border: 1px solid #999; padding: 5px;">15</th>
+        </tr>
+        <tr>
+            <th style="border: 1px solid #999; padding: 5px; background-color: #e0e0e0;">Coût</th>
+            <td style="border: 1px solid #999; padding: 5px; text-align: center;">0</td>
+            <td style="border: 1px solid #999; padding: 5px; text-align: center;">1</td>
+            <td style="border: 1px solid #999; padding: 5px; text-align: center;">2</td>
+            <td style="border: 1px solid #999; padding: 5px; text-align: center;">3</td>
+            <td style="border: 1px solid #999; padding: 5px; text-align: center;">4</td>
+            <td style="border: 1px solid #999; padding: 5px; text-align: center;">5</td>
+            <td style="border: 1px solid #999; padding: 5px; text-align: center;">7</td>
+            <td style="border: 1px solid #999; padding: 5px; text-align: center;">9</td>
+        </tr>
+    </table>
+    
+    <p><strong>Exemple :</strong> STR=12 (4 pts) + DEX=10 (2 pts) + CON=13 (5 pts) + INT=9 (1 pt) + WIS=14 (7 pts) + CHA=8 (0 pts) = 19 points (reste 8 points à dépenser).</p>
+</section>
+
 {{ form_start(form) }}
     {{ form_widget(form) }}
     <button class="btn">{{ button_label|default('Save') }}</button>

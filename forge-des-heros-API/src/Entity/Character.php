@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\CharacterRepository;
+use App\Validator\PointBuy;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]
+#[PointBuy]
 class Character
 {
     #[ORM\Id]
