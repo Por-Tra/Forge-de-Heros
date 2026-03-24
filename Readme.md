@@ -110,6 +110,12 @@ symfony console doctrine:migrations:migrate
 php bin/console doctrine:fixtures:load
 ```
 
+### Surcharcger le fichier .env.local avec les informations de connexion à la base de données SQLite :
+
+```bash
+DATABASE_URL="sqlite:///%kernel.project_dir%/var/data.db"
+```
+
 ### Lancement du serveur
 
 ```bash
