@@ -120,7 +120,7 @@ function CharacterDetail() {
           {character.image ? (
             <img
               className="cd-avatar"
-              src={character.image}
+              src={`https://127.0.0.1:8000/uploads/avatars/${character.image}`}
               alt={`Avatar de ${character.name}`}
             />
           ) : (

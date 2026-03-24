@@ -121,7 +121,7 @@ function PartyDetail() {
                 >
                   <div className="pd-member-avatar">
                     {member.image ? (
-                      <img src={member.image} alt={`Avatar de ${member.name}`} />
+                      <img src={`https://127.0.0.1:8000/uploads/avatars/${member.image}`} alt={`Avatar de ${member.name}`} />
                     ) : (
                       <div className="pd-member-placeholder">
                         {member.name

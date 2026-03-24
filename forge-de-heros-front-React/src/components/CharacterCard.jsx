@@ -79,7 +79,7 @@ function CharacterCard({ characterID }) {
         {data.image ? (
           <img
             className="character-card__avatar"
-            src={data.image}
+            src={`https://127.0.0.1:8000/uploads/avatars/${data.image}`}
             alt={`Avatar de ${data.name}`}
           />
         ) : (
