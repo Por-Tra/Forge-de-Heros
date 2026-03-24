@@ -35,7 +35,7 @@
                 <td>{{ party.maxSize is null ? 'Non definie' : party.maxSize }}</td>
             </tr>
             <tr>
-                <th>Membres</th>
+                <th>Members</th>
                 <td>
                     {{ party.characters|length }}
                     {% if party.maxSize is not null %}
@@ -46,26 +46,26 @@
         </tbody>
     </table>
 
-    <h2>Personnages dans le groupe</h2>
+    <h2>Characters in the party     </h2>
     <ul>
         {% for character in party.characters %}
             <li>
-                {{ character.name }} (niveau {{ character.level }})
+                {{ character.name }} (level {{ character.level }})
                 {% if character.user %}
-                    - proprietaire: {{ character.user.username }}
+                    - owner: {{ character.user.username }}
                 {% endif %}
             </li>
         {% else %}
-            <li>Aucun personnage dans ce groupe.</li>
+            <li>No characters in this group.</li>
         {% endfor %}
     </ul>
 
-    <h2>Inscrire un de mes personnages</h2>
+    <h2>Subscribe a character</h2>
     {% if joinableCharacters is empty %}
-        <p>Vous n'avez pas de personnage disponible a inscrire.</p>
-        <p><a href="{{ path('app_character_new') }}">Creer un personnage</a></p>
+        <p>You do not have any characters available to register.</p>
+        <p><a href="{{ path('app_character_new') }}">Create a character</a></p>
     {% elseif partyIsFull %}
-        <p>Le groupe est complet.</p>
+        <p>The group is complete.</p>
     {% else %}
         <ul>
             {% for character in joinableCharacters %}
@@ -73,16 +73,16 @@
                     {{ character.name }} (niveau {{ character.level }})
                     <form method="post" action="{{ path('app_party_join', {'id': party.id, 'characterId': character.id}) }}" style="display: inline; margin-left: 8px;">
                         <input type="hidden" name="_token" value="{{ csrf_token('party_join_' ~ party.id ~ '_' ~ character.id) }}">
-                        <button type="submit">Inscrire</button>
+                        <button type="submit">Subscribe</button>
                     </form>
                 </li>
             {% endfor %}
         </ul>
     {% endif %}
 
-    <h2>Retirer un de mes personnages</h2>
+    <h2>Remove one of my characters</h2>
     {% if leavableCharacters is empty %}
-        <p>Aucun de vos personnages n'est actuellement dans ce groupe.</p>
+        <p>None of your characters are currently in this group.</p>
     {% else %}
         <ul>
             {% for character in leavableCharacters %}
@@ -90,7 +90,7 @@
                     {{ character.name }} (niveau {{ character.level }})
                     <form method="post" action="{{ path('app_party_leave', {'id': party.id, 'characterId': character.id}) }}" style="display: inline; margin-left: 8px;">
                         <input type="hidden" name="_token" value="{{ csrf_token('party_leave_' ~ party.id ~ '_' ~ character.id) }}">
-                        <button type="submit">Desinscrire</button>
+                        <button type="submit">Unsubscribe</button>
                     </form>
                 </li>
             {% endfor %}
