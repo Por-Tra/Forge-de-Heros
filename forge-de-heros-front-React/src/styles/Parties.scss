@@ -115,7 +115,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
-  max-width: 1200px;
+  max-width: 900px; /* réduit pour s'aligner avec le titre */
+  justify-items: center; /* centre les cartes dans chaque cellule */
   margin: 24px auto;
   padding: 22px;
   border-radius: 14px;
@@ -130,6 +131,12 @@
     0 12px 40px rgba(0, 0, 0, 0.8),
     inset 0 -10px 30px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* s'assurer que chaque carte remplit sa cellule et reste bien alignée */
+.parties-list .party-card {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Responsive */

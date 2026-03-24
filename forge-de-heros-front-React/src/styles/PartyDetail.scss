@@ -1,21 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap');
 
-/* wrapper centré et contenu lisible */
-.party-detail-page {
-  min-height: 100vh;
-  padding: 40px 20px;
-  max-width: 980px;
-  margin: 0 auto;
-  box-sizing: border-box;
-  background: radial-gradient(
-    circle at 10% 10%,
-    #0f0b08 0%,
-    #0b0a0a 25%,
-    #0a0a0a 100%
-  );
-  font-size: 16px;
-  line-height: 1.45;
+/* reset léger + fond global noir (aligné sur CharacterDetail) */
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #000;
+  color: #efe6c8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   font-family:
     'Inter',
     system-ui,
@@ -24,9 +20,18 @@
     Roboto,
     'Helvetica Neue',
     Arial;
-  color: #efe6c8;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+}
+
+/* wrapper centré et contenu lisible (même layout que CharacterDetail) */
+.party-detail-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  max-width: 980px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background: transparent;
+  font-size: 16px;
+  line-height: 1.45;
 }
 
 /* titre : moderne mais élégant */
@@ -42,7 +47,7 @@
 
 /* zone meta : carte propre, sombre et contrastée */
 .pd-top {
-  position: relative;
+  position: relative; /* allow absolutely positioned children (back link) */
   display: flex;
   gap: 20px;
   align-items: center;
@@ -80,6 +85,7 @@
   gap: 8px;
 }
 
+/* hover / focus */
 .pd-back-link:hover,
 .pd-back-link:focus {
   transform: translateY(-2px);
@@ -88,17 +94,14 @@
   outline: none;
 }
 
-/* Icône du groupe */
-.pd-icon-wrapper {
-  flex-shrink: 0;
-}
-
+/* Icône / avatar du groupe */
 .pd-icon {
   width: 110px;
   height: 110px;
+  object-fit: cover;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  background: linear-gradient(180deg, #efe6cc, #e7d8b0);
+  background: #efe6cc;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
@@ -106,9 +109,19 @@
   font-size: 3.5rem;
 }
 
-.pd-icon--full {
-  background: linear-gradient(180deg, #d9c9a8, #cbb390);
-  opacity: 0.8;
+/* placeholder icon */
+.pd-icon--placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #efe6cc, #e7d8b0);
+  color: #5a3f10;
+  font-weight: 700;
+  font-size: 34px;
+  width: 110px;
+  height: 110px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 /* meta text : lisible et espacé */
@@ -117,7 +130,6 @@
   color: #efe6c8;
   font-size: 15px;
 }
-
 .pd-meta-line {
   margin: 6px 0;
   display: flex;
