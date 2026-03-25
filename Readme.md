@@ -146,7 +146,7 @@ http://localhost:8000/api/v1
 ### Routes principales
 
 | Route            | Description           | Accessibilité         |
-| ---------------- | --------------------- |                       |
+| -----------------|-----------------------|-----------------------|
 | /race            | Liste des races       | Admin                 |
 | /character/class | Liste des classes     | Admin                 |
 | /skills          | Liste des compétences | Admin                 |
